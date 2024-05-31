@@ -33,20 +33,20 @@ public:
     {
         int direction = isWhite ? -1 : 1;
 
-        // Movimiento hacia adelante una casilla
+        // moves 1 square forward
         if (newPos.x == position.x && newPos.y == position.y + direction)
         {
             return true;
         }
 
-        // Movimiento inicial de dos casillas
+        // moves 2 squares forward if it's the first move
         if (newPos.x == position.x && newPos.y == position.y + 2 * direction &&
             ((isWhite && position.y == 6) || (!isWhite && position.y == 1)))
         {
             return true;
         }
 
-        // Captura diagonal
+        // diagonal capture
         if ((newPos.x == position.x + 1 || newPos.x == position.x - 1) &&
             newPos.y == position.y + direction)
         {

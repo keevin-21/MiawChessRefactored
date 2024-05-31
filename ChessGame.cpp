@@ -12,44 +12,52 @@ int main()
 
     SetTargetFPS(60);
 
+    Vector2 selectedPos = { -1, -1 };  // position of the selected piece
+
     while (!WindowShouldClose())
     {
         // move a piece
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             Vector2 mousePosition = GetMousePosition();
-            Vector2 selectedPos = { floor(mousePosition.x / 80), floor(mousePosition.y / 80) };
+            Vector2 clickedPos = { floor(mousePosition.x / 80), floor(mousePosition.y / 80) };
 
-            Piece* selectedPiece = board.GetPieceAtPosition(selectedPos);
-
-            // white pieces move up
-            if (selectedPiece && selectedPiece->IsWhite())
-            {
-                Vector2 targetPos = { selectedPos.x, selectedPos.y - 1 }; // movement test
-                if (selectedPiece->CanMove(targetPos))
-                {
-                    selectedPiece->Move(targetPos);
+            if (selectedPos.x == -1 && selectedPos.y == -1) {
+                // selecy a piece
+                Piece* selectedPiece = board.GetPieceAtPosition(clickedPos);
+                if (selectedPiece) {
+                    selectedPos = clickedPos;
                 }
             }
-
-            // black pieces move down
-            if (selectedPiece && selectedPiece->IsWhite() == false)
-            {
-                Vector2 targetPos = { selectedPos.x, selectedPos.y + 1 }; // movement test
-                if (selectedPiece->CanMove(targetPos))
-                {
-                    selectedPiece->Move(targetPos);
+            else {
+                // try to move the selected piece
+                Piece* selectedPiece = board.GetPieceAtPosition(selectedPos);
+                if (selectedPiece) {
+                    if (selectedPiece->IsWhite()) {
+                        Vector2 targetPos = { selectedPos.x, selectedPos.y - 1 }; // movement test for white
+                        if (selectedPiece->CanMove(targetPos)) {
+                            selectedPiece->Move(targetPos);
+                        }
+                    }
+                    else {
+                        Vector2 targetPos = { selectedPos.x, selectedPos.y + 1 }; // movement test for black
+                        if (selectedPiece->CanMove(targetPos)) {
+                            selectedPiece->Move(targetPos);
+                        }
+                    }
+                    selectedPos = { -1, -1 }; // unselect the piece after moving
                 }
             }
-
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
-
-            board.Draw();
-
-            EndDrawing();
         }
 
-        CloseWindow();
-        return 0;
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        board.Draw();
+
+        EndDrawing();
     }
+
+    CloseWindow();
+
+    return 0;
 }

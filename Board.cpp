@@ -13,7 +13,7 @@ Board::~Board() {
 }
 
 void Board::Draw() {
-    // drawing the board
+    // draws the board
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if ((i + j) % 2 == 0)
@@ -23,7 +23,7 @@ void Board::Draw() {
         }
     }
 
-    // drawing the pieces
+    // draws the pieces
     for (auto piece : pieces) {
         piece->Draw();
     }
@@ -38,6 +38,9 @@ void Board::InitializePieces() {
     }
 }
 
+// gets the piece at a given position
+// returns a pointer to the piece if found, nullptr otherwise
+// works by iterating over the pieces vector and comparing the position of each piece with the given position :)
 Piece* Board::GetPieceAtPosition(Vector2 pos) {
     for (auto piece : pieces) {
         if (piece->GetPosition().x == pos.x && piece->GetPosition().y == pos.y) {
