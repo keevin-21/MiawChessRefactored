@@ -29,6 +29,7 @@ public:
     Vector2 panOffset;
     bool dragWindow;
     bool exitWindow;
+    bool startbutton;
 
     // variables
     // int centerPositionX;
