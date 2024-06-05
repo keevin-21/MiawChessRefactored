@@ -1,8 +1,25 @@
 #include "Menu.h"
-#include "Board.h"
-#include "raylib.h"
-    
+#include "Game.h"
 
+int main()
+{
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+
+    Vector2 initPosition = { 500, 200 };
+    Menu window(screenWidth, screenHeight, "ChessGame", initPosition);
+    window.Run(); // menu window. 
+
+	// start of the game. Kevin code.
+	Game game(screenWidth, screenHeight, "ChessGame", initPosition);
+	game.RunGame(); // game window.
+	
+    return 0;
+}
+
+
+
+/*
 int main()
 {
     const int screenWidth = 1280;
@@ -10,8 +27,9 @@ int main()
   
     Vector2 initPosition = { 500, 200 };
     Menu window(screenWidth, screenHeight, "ChessGame", initPosition);
-    window.Run();
+	window.Run(); // menu window. 
 
+	// start of the game. Kevin code.
     Board board;
 
     SetTargetFPS(60);
@@ -65,3 +83,4 @@ int main()
 
     return 0;
 }
+*/

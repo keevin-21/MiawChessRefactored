@@ -1,41 +1,68 @@
 #include "Game.h"
 
-Game::Game(int screenWidth, int screenHeight)
-    : screenWidth(screenWidth), screenHeight(screenHeight), circleRadius(20) 
-{ // init windows and setTargetFPS
-    circlePosition = { (float)screenWidth / 2, (float)screenHeight / 2 };
-    InitWindow(screenWidth, screenHeight, "Mi Juego con Raylib");
-    SetTargetFPS(60);
+Game::Game(int screenWidth, int screenHeight, const char* GameTitle, Vector2 initPosition)
+    : Menu(screenWidth, screenHeight, GameTitle, initPosition), board(), selectedPos({ -1, -1 })
+{
+    currentstate = GameState::GAME;
 }
 
-Game::~Game() 
+Game::~Game()
 {
     // close window
     CloseWindow();
 }
 
-void Game::Run() 
+void Game::RunGame()
 {
-    // while !Windows should close and update with draw function. 
     while (!WindowShouldClose()) {
-        Update();
-        Draw();
+        UpdateGame();
+        DrawGame();
     }
 }
 
-void Game::Update() 
+void Game::DrawGame()
 {
-    // Controls of the game, keys.
-    if (IsKeyDown(KEY_RIGHT)) circlePosition.x += 2.0f;
-    if (IsKeyDown(KEY_LEFT)) circlePosition.x -= 2.0f;
-    if (IsKeyDown(KEY_UP)) circlePosition.y -= 2.0f;
-    if (IsKeyDown(KEY_DOWN)) circlePosition.y += 2.0f;
-}
-
-void Game::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    // draw object and function
-    DrawCircleV(circlePosition, circleRadius, MAROON);
+
+    board.Draw();
+
     EndDrawing();
+}
+
+void Game::UpdateGame()
+{
+    // Controls of the game, keys.
+    // move a piece
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        Vector2 mousePosition = GetMousePosition();
+        Vector2 clickedPos = { floor(mousePosition.x / 80), floor(mousePosition.y / 80) };
+
+        if (selectedPos.x == -1 && selectedPos.y == -1) {
+            // selecy a piece
+            Piece* selectedPiece = board.GetPieceAtPosition(clickedPos);
+            if (selectedPiece) {
+                selectedPos = clickedPos;
+            }
+        }
+        else {
+            // try to move the selected piece
+            Piece* selectedPiece = board.GetPieceAtPosition(selectedPos);
+            if (selectedPiece) {
+                if (selectedPiece->IsWhite()) {
+                    Vector2 targetPos = { selectedPos.x, selectedPos.y - 1 }; // movement test for white
+                    if (selectedPiece->CanMove(targetPos)) {
+                        selectedPiece->Move(targetPos);
+                    }
+                }
+                else {
+                    Vector2 targetPos = { selectedPos.x, selectedPos.y + 1 }; // movement test for black
+                    if (selectedPiece->CanMove(targetPos)) {
+                        selectedPiece->Move(targetPos);
+                    }
+                }
+                selectedPos = { -1, -1 }; // unselect the piece after moving
+            }
+        }
+    }
 }

@@ -22,7 +22,7 @@ public:
     void Run(); // run game. start it.
     void Deinit(); // delete variables
     void Update(); // realize changes on the game.
-	void DrawBoardMenu(); // draw board menu.
+    void DrawBoardMenu(); // draw board menu.
     void Draw(); // draw menu.
 
     // Menu variables.
@@ -38,7 +38,7 @@ public:
 
     // variables
     GameState currentstate;
-	std::string player1; // Player 1 name.
-	char nameBuffer[21];  // Buffer to save the name of the player.
+    std::string player1; // Player 1 name.
+    char nameBuffer[21];  // Buffer to save the name of the player.
 
 };
