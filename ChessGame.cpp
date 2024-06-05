@@ -1,12 +1,16 @@
+#include "Menu.h"
 #include "Board.h"
 #include "raylib.h"
+    
 
 int main()
 {
     const int screenWidth = 1280;
     const int screenHeight = 720;
-
-    InitWindow(screenWidth, screenHeight, "Chess Game");
+  
+    Vector2 initPosition = { 500, 200 };
+    Menu window(screenWidth, screenHeight, "ChessGame", initPosition);
+    window.Run();
 
     Board board;
 
