@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "raylib.h"
+#include <vector>
 
 int main()
 {
@@ -13,6 +14,8 @@ int main()
     SetTargetFPS(60);
 
     Vector2 selectedPos = { -1, -1 };  // position of the selected piece
+    std::vector<Vector2> possibleMoves;
+    std::vector<Vector2> captureMoves;
 
     while (!WindowShouldClose())
     {
@@ -22,29 +25,27 @@ int main()
             Vector2 clickedPos = { floor(mousePosition.x / 80), floor(mousePosition.y / 80) };
 
             if (selectedPos.x == -1 && selectedPos.y == -1) {
-                // selecy a piece
+                // select a piece
                 Piece* selectedPiece = board.GetPieceAtPosition(clickedPos);
                 if (selectedPiece) {
                     selectedPos = clickedPos;
+                    possibleMoves = selectedPiece->GetPossibleMoves(); // Get possible moves
+                    captureMoves = selectedPiece->GetCaptureMoves(); // Get capture moves
                 }
             }
             else {
                 // try to move the selected piece
                 Piece* selectedPiece = board.GetPieceAtPosition(selectedPos);
                 if (selectedPiece) {
-                    if (selectedPiece->IsWhite()) {
-                        Vector2 targetPos = { selectedPos.x, selectedPos.y - 1 }; // movement test for white
-                        if (selectedPiece->CanMove(targetPos)) {
-                            selectedPiece->Move(targetPos);
-                        }
+                    if (selectedPiece->CanMove(clickedPos)) {
+                        selectedPiece->Move(clickedPos);
                     }
-                    else {
-                        Vector2 targetPos = { selectedPos.x, selectedPos.y + 1 }; // movement test for black
-                        if (selectedPiece->CanMove(targetPos)) {
-                            selectedPiece->Move(targetPos);
-                        }
+                    else if (selectedPiece->IsCaptureMove(clickedPos, board)) {
+                        selectedPiece->Move(clickedPos);
                     }
                     selectedPos = { -1, -1 }; // unselect the piece after moving
+                    possibleMoves.clear(); // Clear possible moves after moving
+                    captureMoves.clear(); // Clear capture moves after moving
                 }
             }
         }
@@ -53,6 +54,16 @@ int main()
         ClearBackground(RAYWHITE);
 
         board.Draw();
+
+        // Draw possible moves
+        for (const Vector2& move : possibleMoves) {
+            DrawCircleV({ move.x * 80 + 40, move.y * 80 + 40 }, 20, Fade(GREEN, 0.5f));
+        }
+
+        // Draw capture moves
+        for (const Vector2& move : captureMoves) {
+            DrawCircleV({ move.x * 80 + 40, move.y * 80 + 40 }, 20, Fade(RED, 0.5f));
+        }
 
         EndDrawing();
     }
