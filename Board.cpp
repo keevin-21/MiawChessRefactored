@@ -7,12 +7,12 @@ Board::Board(const Board& other) {
     Clear();
 
     for (Piece* whitePiece : other.whitePieces) {
-        Piece* newPiece = Piece::CreatePieceByType(whitePiece->type, whitePiece->GetPosition(), whitePiece->color);
+        Piece* newPiece = Piece::CreatePiece(whitePiece->type, whitePiece->GetPosition(), whitePiece->color);
         Add(newPiece);
     }
 
     for (Piece* blackPiece : other.blackPieces) {
-        Piece* newPiece = Piece::CreatePieceByType(blackPiece->type, blackPiece->GetPosition(), blackPiece->color);
+        Piece* newPiece = Piece::CreatePiece(blackPiece->type, blackPiece->GetPosition(), blackPiece->color);
         Add(newPiece);
     }
 }

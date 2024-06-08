@@ -17,9 +17,9 @@ public:
     Piece(Position position, PIECE_COLOR color, PIECE_TYPE type);
     virtual ~Piece() = default;
 
-    static Piece* CreatePieceByType(PIECE_TYPE type, const Position& position, PIECE_COLOR color);
+    static Piece* CreatePiece(PIECE_TYPE type, const Position& position, PIECE_COLOR color);
     static PIECE_COLOR GetInverseColor(PIECE_COLOR color);
-    static std::string GetPieceCharacterByType(PIECE_TYPE type);
+    static std::string GetPieceCharacter(PIECE_TYPE type);
 
     virtual void DoMove(const Move& move);
     virtual std::vector<Move> GetPossibleMoves(const Board& board) = 0;

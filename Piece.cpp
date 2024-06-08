@@ -30,7 +30,7 @@ bool Piece::HasMoved() {
     return hasMoved;
 }
 
-Piece* Piece::CreatePieceByType(PIECE_TYPE type, const Position& position, PIECE_COLOR color) {
+Piece* Piece::CreatePiece(PIECE_TYPE type, const Position& position, PIECE_COLOR color) {
     switch (type) {
     case PAWN:
         return new Pawn(position, color);
@@ -51,7 +51,7 @@ PIECE_COLOR Piece::GetInverseColor(PIECE_COLOR color) {
     return color == PIECE_COLOR::C_WHITE ? PIECE_COLOR::C_BLACK : PIECE_COLOR::C_WHITE;
 }
 
-std::string Piece::GetPieceCharacterByType(PIECE_TYPE type) {
+std::string Piece::GetPieceCharacter(PIECE_TYPE type) {
     switch (type) {
     case PAWN:
         return "p";

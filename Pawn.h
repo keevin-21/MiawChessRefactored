@@ -4,7 +4,6 @@
 #include "Piece.h"
 #include "Board.h"
 
-#include "Piece.h"
 class Pawn :
     public Piece
 {
@@ -14,11 +13,11 @@ public:
     void DoMove(const Move& move) override;
     std::vector<Move> GetPossibleMoves(const Board& board) override;
 
-    bool availableDoubleStep = false;
+    bool didDoubleStep = false;
 
 private:
-    bool IsInPromotionZone(const Position& position);
-    bool IsEnPassantAvailable(const Board& board, const Position& attackPosition);
+    bool IsInPromotionPos(const Position& position);
+    bool IsEnPassantAvailable(const Board& board, const Position& piecePosition, const Position& attackPosition);
 };
 
 #endif //MEOWCHESS_PAWN_H
