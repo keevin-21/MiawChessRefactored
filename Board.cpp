@@ -1,5 +1,11 @@
 #include "Board.h"
 #include "Pawn.h"
+#include "Rook.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "Queen.h"
+#include "King.h"
+
 #include <string>
 #include <map>
 
@@ -29,18 +35,63 @@ void Board::Init()
 		Add(new Pawn({ 1, j }, PIECE_COLOR::C_BLACK));
 	}
 
+    Add(new Rook({ 0, 0 }, PIECE_COLOR::C_BLACK));
+    Add(new Rook({ 0, 7 }, PIECE_COLOR::C_BLACK));
+
+    Add(new Knight({ 0, 1 }, PIECE_COLOR::C_BLACK));
+    Add(new Knight({ 0, 6 }, PIECE_COLOR::C_BLACK));
+
+    Add(new Bishop({ 0, 2 }, PIECE_COLOR::C_BLACK));
+    Add(new Bishop({ 0, 5 }, PIECE_COLOR::C_BLACK));
+
+    Add(new Queen({ 0, 3 }, PIECE_COLOR::C_BLACK));
+    Add(new King({ 0, 4 }, PIECE_COLOR::C_BLACK));
+
+
     // White pieces.
     for (int j = 0; j < 8; j++)
     {
         Add(new Pawn({ 6, j }, PIECE_COLOR::C_WHITE));
     }
+
+    Add(new Rook({ 7, 0 }, PIECE_COLOR::C_WHITE));
+    Add(new Rook({ 7, 7 }, PIECE_COLOR::C_WHITE));
+
+    Add(new Knight({ 7, 1 }, PIECE_COLOR::C_WHITE));
+    Add(new Knight({ 7, 6 }, PIECE_COLOR::C_WHITE));
+
+    Add(new Bishop({ 7, 2 }, PIECE_COLOR::C_WHITE));
+    Add(new Bishop({ 7, 5 }, PIECE_COLOR::C_WHITE));
+
+    Add(new Queen({ 7, 3 }, PIECE_COLOR::C_WHITE));
+    Add(new King({ 7, 4 }, PIECE_COLOR::C_WHITE));
 }
 
 Piece* Board::At(const Position& position) const
 {
+    if(!IsPositionWithinLimits(position))
+	{
+		return nullptr;
+	}
 
+    for (Piece* whitePiece : whitePieces)
+    {
+        if (whitePiece->GetPosition().i == position.i && whitePiece->GetPosition().j == position.j)
+        {
+            return whitePiece;
+        }
+    }
+
+    for (Piece* blackPiece : blackPieces)
+	{
+		if (blackPiece->GetPosition().i == position.i && blackPiece->GetPosition().j == position.j)
+		{
+			return blackPiece;
+		}
+	}
+
+    return nullptr;
 }
-
 
 void Board::Add(Piece* piece)
 {

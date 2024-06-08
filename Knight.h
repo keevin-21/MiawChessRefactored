@@ -7,6 +7,7 @@
 class Knight :
     public Piece
 {
+public:
     Knight(Position position, PIECE_COLOR color): Piece(position, color, PIECE_TYPE::KNIGHT) {}
 
     std::vector<Move> GetPossibleMoves(const Board& board) override;
