@@ -2,7 +2,7 @@
 ### Programacion Orientada a Objetos (Oriented Object Programming).
 ### Ingeniería de Software (Software Engineer). Semester IV.
 ### Integrantes:
-- **Kevin Alejandro**.
+- **Kevin Alejandro Gonzalez Torres**.
 - **Andrea Rivas Gomez**.
 - **Teresa Rivas Gomez**.
 ---

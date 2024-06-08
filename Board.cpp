@@ -199,6 +199,11 @@ bool Board::MoveLeadsToCheck(Piece* piece, const Move& move)
 {
     Board boardCopy = *this;
     Piece* pieceCopy = boardCopy.At(piece->GetPosition());
+
+    // Perform the move on the copied board.
+    boardCopy.DoMove(pieceCopy, move);
+
+    return boardCopy.IsInCheck(piece->color);
 }
 
 bool Board::IsInCheck(PIECE_COLOR color)
