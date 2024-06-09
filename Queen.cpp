@@ -26,21 +26,24 @@ std::vector<Move> Queen::GetPossibleMoves(const Board& board)
 
 void Queen::ValidMoves(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease)
 {
-	while(board.IsPositionWithinLimits(pos))
+	while (board.IsPositionWithinLimits(pos))
 	{
-		if(!board.At(pos))
+		const Piece* pieceAtPos = board.At(pos);
+
+		if (pieceAtPos == nullptr)
 		{
 			possibleMoves.push_back({ MOVES::STEP, pos });
-			pos.i += iIncrease;
-			pos.j += jIncrease;
-		}
-		else if (board.At(pos) && board.At(pos)->color != color)
-		{
-			break;
 		}
 		else
 		{
+			if (pieceAtPos->color != color)
+			{
+				possibleMoves.push_back({ MOVES::ATTACK, pos });
+			}
 			break;
 		}
+
+		pos.i += iIncrease;
+		pos.j += jIncrease;
 	}
 }

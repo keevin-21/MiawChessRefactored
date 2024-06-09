@@ -65,7 +65,7 @@ void Game::Run()
 
 		if(gameState == GAME_STATE::GS_PROMOTION)
 		{
-			HandleInput();
+			HandlePromotion();
 		}
 
 		BeginDrawing();

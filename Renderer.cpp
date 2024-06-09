@@ -90,7 +90,7 @@ void Renderer::RenderGuide()
 	}
 }
 
-void Renderer::RenderPromotion(const std::map<string, Texture>& textures, PIECE_COLOR pawnColor)
+void Renderer::RenderPromotion(const std::map<std::string, Texture> &textures, PIECE_COLOR pawnColor)
 {
 	DrawRectangle(0, 0, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, Color{ 0, 0, 0, 127 });
 	DrawText("Promotion", Game::WINDOW_WIDTH / 2 - 98, Game::WINDOW_HEIGHT / 4, 40, WHITE);
@@ -195,7 +195,7 @@ void Renderer::MouseCursor(const Board& board, const std::vector<Move>& possible
 	}
 }
 
-string Renderer::GetTextureFromMoveType(MOVES moveType)
+std::string Renderer::GetTextureFromMoveType(MOVES moveType)
 {
 	switch (moveType) {
 	case MOVES::STEP:
