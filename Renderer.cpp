@@ -143,7 +143,7 @@ void Renderer::RenderEndGame(GAME_STATE gameState)
 {
 	DrawRectangle(0, 0, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, Color{ 0, 0, 0, 127 });
 
-	const char* text; //{}
+	const char* text{}; //{}
 
 	if (gameState == GAME_STATE::GS_WHITE_WON) {
 		text = "WHITE WINS !";
