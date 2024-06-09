@@ -27,7 +27,6 @@ public:
 	const static int WINDOW_HEIGHT = 720;
 	const static int CELL_SIZE = 80;
 	const static int INFO_BAR_HEIGHT = 32;
-
 	
 	const static Color LIGHT_SHADE;
 	const static Color DARK_SHADE;
