@@ -8,7 +8,7 @@
 
 Piece::Piece(Position position, PIECE_COLOR color, PIECE_TYPE type) : position(position), color(color), type(type) {
     std::string colorPrefix = color == PIECE_COLOR::C_WHITE ? "w" : "b";
-    std::string pieceCharacter = GetPieceCharacter(type);
+    std::string pieceCharacter = GetPieceCharacterByType(type);
 
     this->name = colorPrefix + pieceCharacter;
 }

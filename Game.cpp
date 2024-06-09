@@ -17,9 +17,6 @@ const string Game::ASSETS_PATH = "assets/";
 const string Game::TEXTURES_PATH = ASSETS_PATH + "textures/";
 const string Game::SOUNDS_PATH = ASSETS_PATH + "sounds/";
 
-const Color Game::LIGHT_SHADE = Color{ 255, 217, 237, 255 };
-const Color Game::DARK_SHADE = Color{ 255, 104, 182, 255 };
-
 Game::Game()
 {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MeowChess");
@@ -124,39 +121,11 @@ void Game::SwapTurn()
 
 void Game::LoadTextures()
 {
-	for (const auto& entry : std::filesystem::directory_iterator(TEXTURES_PATH))
-	{
-		// Load and resize image.
-		Image image = LoadImage(entry.path().string().c_str());
-		ImageResize(&image, CELL_SIZE, CELL_SIZE);
-
-		Texture texture = LoadTextureFromImage(image);
-
-		// Add texture to map.
-		string textureName = entry.path().filename().string();
-		size_t dotIndex = textureName.find('.');
-
-		string fileNameNoExtension = entry.path().filename().string().substr(0, dotIndex);
-		textures[fileNameNoExtension] = texture;
-
-		UnloadImage(image);
-	}
+	for(const auto& entry : std::file)
 }
 
 void Game::LoadSounds()
 {
-	for (const auto& entry : std::filesystem::directory_iterator(SOUNDS_PATH))
-	{
-		// Load sound.
-		Sound sound = LoadSound(entry.path().string().c_str());
-
-		// Add sound to map of sounds.
-		std::string fileName = entry.path().filename().string();
-		size_t dotIndex = fileName.find('.');
-
-		std::string fileNameWithoutExtension = entry.path().filename().string().substr(0, dotIndex);
-		sounds[fileNameWithoutExtension] = sound;
-	}
 }
 
 void Game::HandleInput()
@@ -245,18 +214,6 @@ void Game::HandlePromotion()
 
 void Game::PossibleMoves()
 {
-	possibleMoves.clear();
-
-	for (Piece* piece : board.GetPiecesByColor(turn))
-	{
-		possibleMoves[piece] = piece->GetPossibleMoves(board);
-	}
-
-	// Remove the moves that could destroy the king.
-	FilterMovesThatAttackKing();
-
-	// Remove the moves that could lead to a check.
-	FilterMovesThatAvoidCheck();
 }
 
 void Game::DoMoveOnBoard(const Move& move)
@@ -276,109 +233,34 @@ void Game::DoMoveOnBoard(const Move& move)
 
 Move* Game::GetMoveFromInput(const Position& position)
 {
-	for (auto& entry : possibleMoves)
+	for (auto& [piece, moves] : possibleMoves)
 	{
-		auto& piece = entry.first;
-		auto& moves = entry.second;
-
 		if (piece == selectedPiece)
 		{
 			for (Move& move : moves)
 			{
 				if (move.position.i == position.i && move.position.j == position.j)
 				{
-					return &move; // Return a pointer to the found move
+					return &move;
 				}
 			}
 		}
 	}
-	return nullptr; // Return nullptr if no valid move is found
 }
 
 void Game::CheckEndGame()
 {
-	std::vector<Piece*> piecesOfCurrentTurn = board.GetPiecesByColor(turn);
-
-	if (board.IsInCheck(turn))
-	{
-		// If there are no moves possible and in check, declare checkmate.
-		if (!IsAnyMoveValid())
-		{
-			gameState = (turn == PIECE_COLOR::C_WHITE ? GAME_STATE::GS_BLACK_WON : GAME_STATE::GS_WHITE_WON);
-		}
-	}
-	else if (!IsAnyMoveValid())
-	{
-		// If not in check and there is not any move possible, declare stalemate.
-		gameState = GAME_STATE::GS_STALEMATE;
-	}
 }
 
 void Game::FilterMovesThatAttackKing()
 {
-	for (auto& [piece, possibleMoves] : possibleMoves)
-	{
-		for (int i = possibleMoves.size() - 1; i >= 0; i--)
-		{
-			Move& move = possibleMoves[i];
-
-			// Remove moves that attack the opponent's king.
-			bool isAttackMove = move.type == MOVES::ATTACK || move.type == MOVES::ATTACK_PROMOTION;
-
-			if (isAttackMove)
-			{
-				Piece* attackedPiece = board.At(move.position);
-
-				if (attackedPiece->type == PIECE_TYPE::KING && attackedPiece->color != turn)
-				{
-					possibleMoves.erase(possibleMoves.begin() + i);
-				}
-			}
-		}
-	}
 }
 
 void Game::FilterMovesThatAvoidCheck()
 {
-	for (auto& [piece, possibleMoves] : possibleMoves) {
-		for (int i = possibleMoves.size() - 1; i >= 0; i--) {
-			Move& move = possibleMoves[i];
-
-			// If short castling or long castling, check for intermediary positions between king and rook.
-			if (move.type == MOVES::SHORT_CASTLE || move.type == MOVES::LONG_CASTLE) {
-				std::vector<Position> intermediaryPositions;
-
-				if (move.type == MOVES::SHORT_CASTLE) {
-					intermediaryPositions = { {piece->GetPosition().i, 5}, {piece->GetPosition().i, 6} };
-				}
-				else {
-					intermediaryPositions = { {piece->GetPosition().i, 3}, {piece->GetPosition().i, 2} };
-				}
-
-				for (const Position& position : intermediaryPositions) {
-					if (board.MoveLeadsToCheck(piece, { MOVES::STEP, position })) {
-						possibleMoves.erase(possibleMoves.begin() + i);
-						break;
-					}
-				}
-
-				// If normal move.
-			}
-			else if (board.MoveLeadsToCheck(piece, possibleMoves[i])) {
-				possibleMoves.erase(possibleMoves.begin() + i);
-			}
-		}
-	}
 }
 
 bool Game::IsAnyMoveValid()
 {
-	for (const auto& [pieceName, possibleMoves] : possibleMoves)
-	{
-		if (!possibleMoves.empty())
-		{
-			return true;
-		}
-	}
 	return false;
 }

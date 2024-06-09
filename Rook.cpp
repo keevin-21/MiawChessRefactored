@@ -17,8 +17,6 @@ std::vector<Move> Rook::GetPossibleMoves(const Board& board)
 
     // Right
     ValidMoves(board, possibleMoves, {position.i, position.j + 1 }, 0, 1);
-
-    return possibleMoves;
 }
 
 void Rook::ValidMoves(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease)
