@@ -29,42 +29,9 @@ Board::~Board() {
 
 void Board::Init()
 {
-    // Black pieces.
-    for (int j = 0; j < 8; j++)
-	{
-		Add(new Pawn({ 1, j }, PIECE_COLOR::C_BLACK));
-	}
-
-    Add(new Rook({ 0, 0 }, PIECE_COLOR::C_BLACK));
-    Add(new Rook({ 0, 7 }, PIECE_COLOR::C_BLACK));
-
-    Add(new Knight({ 0, 1 }, PIECE_COLOR::C_BLACK));
-    Add(new Knight({ 0, 6 }, PIECE_COLOR::C_BLACK));
-
-    Add(new Bishop({ 0, 2 }, PIECE_COLOR::C_BLACK));
-    Add(new Bishop({ 0, 5 }, PIECE_COLOR::C_BLACK));
-
-    Add(new Queen({ 0, 3 }, PIECE_COLOR::C_BLACK));
-    Add(new King({ 0, 4 }, PIECE_COLOR::C_BLACK));
-
-
-    // White pieces.
-    for (int j = 0; j < 8; j++)
-    {
-        Add(new Pawn({ 6, j }, PIECE_COLOR::C_WHITE));
-    }
-
-    Add(new Rook({ 7, 0 }, PIECE_COLOR::C_WHITE));
-    Add(new Rook({ 7, 7 }, PIECE_COLOR::C_WHITE));
-
-    Add(new Knight({ 7, 1 }, PIECE_COLOR::C_WHITE));
-    Add(new Knight({ 7, 6 }, PIECE_COLOR::C_WHITE));
-
-    Add(new Bishop({ 7, 2 }, PIECE_COLOR::C_WHITE));
-    Add(new Bishop({ 7, 5 }, PIECE_COLOR::C_WHITE));
-
-    Add(new Queen({ 7, 3 }, PIECE_COLOR::C_WHITE));
-    Add(new King({ 7, 4 }, PIECE_COLOR::C_WHITE));
+    Add(new King({ 0, 0 }, PIECE_COLOR::C_BLACK));
+    Add(new Queen({ 1, 2 }, PIECE_COLOR::C_BLACK));
+    Add(new King({ 7, 7 }, PIECE_COLOR::C_WHITE));
 }
 
 Piece* Board::At(const Position& position) const

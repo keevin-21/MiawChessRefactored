@@ -41,6 +41,7 @@ public:
 	void Run();
 	void SwapTurn();
 
+
 private:
 	void LoadTextures();
 	void LoadSounds();
@@ -67,6 +68,7 @@ private:
 
 	// Selected piece.
 	Piece* selectedPiece = nullptr;
+
 	std::map<Piece*, std::vector<Move>> possibleMoves;
 
 	// Game info.
