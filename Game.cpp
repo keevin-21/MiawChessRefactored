@@ -11,7 +11,6 @@
 #include <filesystem>
 #include <iostream>
 
-namespace fs = std::filesystem;
 using std::string;
 
 const string Game::ASSETS_PATH = "assets/";
