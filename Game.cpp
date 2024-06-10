@@ -171,38 +171,50 @@ void Game::HandleInput()
 {
 	if (IsMouseButtonPressed(0)) {
 		Vector2 mousePosition = GetMousePosition();
-		mousePosition.y -= Game::INFO_BAR_HEIGHT;
 
-		Position clickedPosition = { int(mousePosition.y) / CELL_SIZE, int(mousePosition.x) / CELL_SIZE };
-		Piece* clickedPiece = board.At(clickedPosition);
+		// Ajuste de la posición del ratón tomando en cuenta el offset del tablero
+		int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+		int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
 
-		// Select piece.
-		if (clickedPiece != nullptr && clickedPiece->color == turn)
-		{
-			PlaySound(sounds["click"]);
-			selectedPiece = clickedPiece;
-		}
-		else {
-			// Do movement.
-			Move* desiredMove = GetMoveFromInput(clickedPosition);
+		mousePosition.x -= offsetX;
+		mousePosition.y -= offsetY;
 
-			if (desiredMove && selectedPiece != nullptr)
+		// Verificación de que el clic esté dentro de los límites del tablero
+		if (mousePosition.x >= 0 && mousePosition.y >= 0 &&
+			mousePosition.x < 8 * Game::CELL_SIZE && mousePosition.y < 8 * Game::CELL_SIZE) {
+
+			Position clickedPosition = { int(mousePosition.y) / CELL_SIZE, int(mousePosition.x) / CELL_SIZE };
+			Piece* clickedPiece = board.At(clickedPosition);
+
+			// Selección de la pieza
+			if (clickedPiece != nullptr && clickedPiece->color == turn)
 			{
-				DoMoveOnBoard(*desiredMove);
+				PlaySound(sounds["click"]);
+				selectedPiece = clickedPiece;
 			}
-			else
-			{
-				PlaySound(sounds["clickCancel"]);
-			}
+			else {
+				// Movimiento de la pieza
+				Move* desiredMove = GetMoveFromInput(clickedPosition);
 
-			// Piece must still be selected to render promotion screen.
-			if (!desiredMove || (desiredMove->type != MOVES::PROMOTION && desiredMove->type != MOVES::ATTACK_PROMOTION))
-			{
-				selectedPiece = nullptr;
+				if (desiredMove && selectedPiece != nullptr)
+				{
+					DoMoveOnBoard(*desiredMove);
+				}
+				else
+				{
+					PlaySound(sounds["clickCancel"]);
+				}
+
+				// La pieza debe seguir seleccionada para mostrar la pantalla de promoción
+				if (!desiredMove || (desiredMove->type != MOVES::PROMOTION && desiredMove->type != MOVES::ATTACK_PROMOTION))
+				{
+					selectedPiece = nullptr;
+				}
 			}
 		}
 	}
 }
+
 
 void Game::HandlePromotion()
 {
@@ -210,7 +222,7 @@ void Game::HandlePromotion()
 		Vector2 mousePosition = GetMousePosition();
 		mousePosition.y -= Game::INFO_BAR_HEIGHT;
 
-		Position clickedPosition = { int(mousePosition.y) / CELL_SIZE, int(mousePosition.x) / CELL_SIZE };
+		Position clickedPosition = { (int(mousePosition.y) / CELL_SIZE), int(mousePosition.x) / CELL_SIZE };
 
 		if (clickedPosition.i == 3 && clickedPosition.j >= 2 && clickedPosition.j <= 5)
 		{

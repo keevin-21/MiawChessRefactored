@@ -10,12 +10,15 @@ void Renderer::Clear()
 
 void Renderer::RenderBackground()
 {
-	for(int i = 0; i < 8; i++)
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+
+	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			int x = j * Game::CELL_SIZE;
-			int y = i * Game::CELL_SIZE + Game::INFO_BAR_HEIGHT;
+			int x = j * Game::CELL_SIZE + offsetX;
+			int y = i * Game::CELL_SIZE + offsetY;
 
 			Color cellColor = GetShadeColor(GetColorCell({ i, j }));
 			DrawRectangle(x, y, Game::CELL_SIZE, Game::CELL_SIZE, cellColor);
@@ -25,7 +28,10 @@ void Renderer::RenderBackground()
 
 void Renderer::RenderPieces(const Board& board, const std::map<string, Texture>& textures)
 {
-	for(int i = 0; i < 8; i++)
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+
+	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
@@ -33,8 +39,8 @@ void Renderer::RenderPieces(const Board& board, const std::map<string, Texture>&
 
 			if (piece != nullptr)
 			{
-				int x = j * Game::CELL_SIZE;
-				int y = i * Game::CELL_SIZE + Game::INFO_BAR_HEIGHT;
+				int x = j * Game::CELL_SIZE + offsetX;
+				int y = i * Game::CELL_SIZE + offsetY;
 
 				DrawTexture(textures.at(piece->GetName()), x, y, WHITE);
 			}
@@ -44,14 +50,17 @@ void Renderer::RenderPieces(const Board& board, const std::map<string, Texture>&
 
 void Renderer::RenderPossibleMoves(const std::map<string, Texture>& textures, const std::vector<Move>& possibleMoves)
 {
-	for(const Move& move : possibleMoves)
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+
+	for (const Move& move : possibleMoves)
 	{
 		DrawTexture(
 			textures.at(GetTextureFromMoveType(move.type)),
-			move.position.j * Game::CELL_SIZE,
-			move.position.i * Game::CELL_SIZE + Game::INFO_BAR_HEIGHT,
+			move.position.j * Game::CELL_SIZE + offsetX,
+			move.position.i * Game::CELL_SIZE + offsetY,
 			WHITE
-			);
+		);
 	}
 }
 
@@ -61,34 +70,38 @@ void Renderer::RenderGuide()
 	int fontSize = 20;
 	int characterSize = 10;
 
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+
+	// Render row numbers (1-8) on the left side
 	for (int i = 0; i < 8; i++)
 	{
-		Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ 7, 0 })));
-
+		Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ i, 0 })));
 		int x = padding;
-		int y = i * Game::CELL_SIZE + padding + Game::INFO_BAR_HEIGHT;
+		int y = i * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetY;
 
 		char text[2];
-		text[0] = 49 + i;
-		text[1] = 0;
+		text[0] = '1' + (7 - i); // For 1-8 from top to bottom
+		text[1] = '\0';
 
-		DrawText(text, x, y, fontSize, textColor);
+		DrawText(text, x + offsetX - padding * 2, y, fontSize, textColor); // Adjust x position for centering
 	}
 
-	for (int j = 0; j < 8; j++) {
+	// Render column letters (a-h) on the bottom side
+	for (int j = 0; j < 8; j++)
+	{
 		Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ 7, j })));
-
-		// Render text.
-		int x = (j + 1) * Game::CELL_SIZE - characterSize - padding;
-		int y = Game::WINDOW_HEIGHT - characterSize * 1.75 - padding;
+		int x = j * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetX;
+		int y = Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT + padding;
 
 		char text[2];
-		text[0] = 97 + (7 - j);
-		text[1] = 0;
+		text[0] = 'a' + j; // For a-h from left to right
+		text[1] = '\0';
 
 		DrawText(text, x, y, fontSize, textColor);
 	}
 }
+
 
 void Renderer::RenderPromotion(const std::map<std::string, Texture> &textures, PIECE_COLOR pawnColor)
 {
@@ -163,6 +176,12 @@ void Renderer::MouseCursor(const Board& board, const std::vector<Move>& possible
 {
 	Vector2 mousePosition = GetMousePosition();
 	mousePosition.y -= Game::INFO_BAR_HEIGHT;
+
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2;
+
+	mousePosition.x -= offsetX;
+	mousePosition.y -= offsetY;
 
 	Position hoverPosition = { int(mousePosition.y) / Game::CELL_SIZE, int(mousePosition.x) / Game::CELL_SIZE };
 
