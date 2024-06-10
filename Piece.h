@@ -31,6 +31,10 @@ public:
     const PIECE_COLOR color;
     const PIECE_TYPE type;
 
+    void SetPosition(const Position& newPosition) {
+        position = newPosition;
+    }
+
 protected:
     Position position;
     bool hasMoved = false;

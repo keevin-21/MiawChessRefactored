@@ -103,40 +103,43 @@ void Renderer::RenderGuide()
 }
 
 
-void Renderer::RenderPromotion(const std::map<std::string, Texture> &textures, PIECE_COLOR pawnColor)
+void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, PIECE_COLOR pawnColor)
 {
-	DrawRectangle(0, 0, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, Color{ 0, 0, 0, 127 });
-	DrawText("Promotion", Game::WINDOW_WIDTH / 2 - 98, Game::WINDOW_HEIGHT / 4, 40, WHITE);
+	// Calcula el offset para centrar el tablero.
+	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
+	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+
+	// Renderiza los elementos centrados.
+	DrawRectangle(offsetX, offsetY, 8 * Game::CELL_SIZE, 8 * Game::CELL_SIZE, Color{ 0, 0, 0, 127 });
+	DrawText("Promotion", offsetX + (Game::WINDOW_WIDTH / 2) - 98, offsetY + (Game::WINDOW_HEIGHT / 4), 40, WHITE);
 
 	string prefix = pawnColor == PIECE_COLOR::C_WHITE ? "w" : "b";
 
-	int textureY = Game::CELL_SIZE * 3 + Game::INFO_BAR_HEIGHT;
-	int textY = Game::CELL_SIZE * 4 + 5 + Game::INFO_BAR_HEIGHT;
+	int textureY = offsetY + 3 * Game::CELL_SIZE;
+	int textY = offsetY + 4 * Game::CELL_SIZE + 5;
 
-	// Queen
+	// Renderiza las opciones de promoción centradas.
 	{
-		DrawTexture(textures.at(prefix + "q"), Game::CELL_SIZE * 2, textureY, WHITE);
-		DrawText("Queen", Game::CELL_SIZE * 2 + 9, textY, 20, WHITE);
+		DrawTexture(textures.at(prefix + "q"), offsetX + 2 * Game::CELL_SIZE, textureY, WHITE);
+		DrawText("Queen", offsetX + 2 * Game::CELL_SIZE + 9, textY, 20, WHITE);
 	}
 
-	// Rook.
 	{
-		DrawTexture(textures.at(prefix + "r"), Game::CELL_SIZE * 3, textureY, WHITE);
-		DrawText("Rook", Game::CELL_SIZE * 3 + 14, textY, 20, WHITE);
+		DrawTexture(textures.at(prefix + "r"), offsetX + 3 * Game::CELL_SIZE, textureY, WHITE);
+		DrawText("Rook", offsetX + 3 * Game::CELL_SIZE + 14, textY, 20, WHITE);
 	}
 
-	// Bishop.
 	{
-		DrawTexture(textures.at(prefix + "b"), Game::CELL_SIZE * 4, textureY, WHITE);
-		DrawText("Bishop", Game::CELL_SIZE * 4 + 7, textY, 20, WHITE);
+		DrawTexture(textures.at(prefix + "b"), offsetX + 4 * Game::CELL_SIZE, textureY, WHITE);
+		DrawText("Bishop", offsetX + 4 * Game::CELL_SIZE + 7, textY, 20, WHITE);
 	}
 
-	// Knight.
 	{
-		DrawTexture(textures.at(prefix + "n"), Game::CELL_SIZE * 5, textureY, WHITE);
-		DrawText("Knight", Game::CELL_SIZE * 5 + 9, textY, 20, WHITE);
+		DrawTexture(textures.at(prefix + "n"), offsetX + 5 * Game::CELL_SIZE, textureY, WHITE);
+		DrawText("Knight", offsetX + 5 * Game::CELL_SIZE + 9, textY, 20, WHITE);
 	}
 }
+
 
 void Renderer::RenderInfo(int round, double timer)
 {
