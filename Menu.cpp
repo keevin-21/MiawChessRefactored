@@ -59,13 +59,8 @@ void Menu::Update()
     }
 
     // Actualizar el estado del bot?n
-    if (!startbutton && GuiButton(Rectangle{ 580.0f, 400.0f, 100, 40 }, "START GAME")) {
+    if (!startbutton && GuiButton(Rectangle{ 305.0f, 400.0f, 100, 40 }, "START GAME")) {
         startbutton = true;
-    }
-
-	if (rungamebutton)
-    {
-		currentstate = GameState::GAME;
     }
 
     // Create an instance where I clicked the start button.
@@ -83,9 +78,9 @@ void Menu::DrawBoardMenu()
         for (j = 0; j < 8; j++)
         {
             if ((i + j) % 2 == 0)
-                DrawRectangle(i * 160, j * 160, 160, 160, CLITERAL(Color){188, 200, 187, 255}); // change the color of the board.
+                DrawRectangle(i * 90, j * 90, 90, 90, LIME); // change the color of the board.
             else
-                DrawRectangle(i * 160, j * 160, 160, 160, CLITERAL(Color){69, 118, 65, 255}); // change the color of the board. 
+                DrawRectangle(i * 90, j * 90, 90, 90, DARKGREEN);
         }
     }
 }
@@ -98,18 +93,19 @@ void Menu::Draw()
     if (startbutton)
     {
         // add logic to change the cpp file to the game one.
-        ClearBackground(CLITERAL(Color) { 69, 118, 65, 255 });
+        ClearBackground(BLACK);
+        exitWindow = GuiWindowBox(Rectangle{ 0.0f, 0.0f, static_cast<float>(screenWidth), 20.0f }, "#198# CHESSY GAME");
 
         // Draw the player name text box.
-        DrawText("Enter your name:", 490, 200, 30, RAYWHITE);
-		GuiTextBox(Rectangle{ 455, 240, 340, 30 }, nameBuffer, 25, true); // rectangle { x, y, width, height } GuiTextBox(Rectangle{ x,y, width, height }, buffer, maxchars, editmode)
+        DrawText("Enter your name:", 190, 200, 20, RAYWHITE);
+        GuiTextBox(Rectangle{ 190, 240, 340, 30 }, nameBuffer, 20, true);
 
-        if (GuiButton(Rectangle{ 580.0f, 350.0f, 100, 40 }, "READY"))
+        if (GuiButton(Rectangle{ 305.0f, 300.0f, 100, 40 }, "READY"))
         {
             player1 = nameBuffer; // Save the player name.
             // Change game status or initialize the game.
-			rungamebutton = true;
-			exitWindow = true; // this allows me to change the screen to the game one. Exit the menu.
+            // startbutton = false; // return to the menu. But here is the game.
+			currentstate = GameState::GAME;
         }
     }
     else
@@ -118,9 +114,10 @@ void Menu::Draw()
         DrawBoardMenu();  // background of the menu. Board menu.
 
         // Draw the menu.
+        // exitWindow = GuiWindowBox(Rectangle{ 0.0f, 0.0f, static_cast<float>(screenWidth), 20.0f }, "#198# CHESSY GAME");
         GuiSetStyle(BUTTON, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-		GuiButton(Rectangle{ 580.0f, 400.0f, 100, 40 }, "START GAME"); // rectangle { x, y, width, height }
-		DrawText("CHESSY GAME", 390, 200, 70, BLACK); // drawtext ("text", x, y, fontsize, color)
+        GuiButton(Rectangle{ 305.0f, 400.0f, 100, 40 }, "START GAME");
+        DrawText("CHESSY GAME", 190, 200, 50, BLACK);
     }
 
     EndDrawing();

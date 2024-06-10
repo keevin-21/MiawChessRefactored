@@ -4,10 +4,6 @@
 #include "raylib.h"
 #include "raygui.h"
 #include <string>
-#include <iostream>
-
-using std::cout;
-using std::endl;
 
 // Class of game status, whether is the game screen or menu screen.
 
@@ -29,7 +25,7 @@ public:
     void DrawBoardMenu(); // draw board menu.
     void Draw(); // draw menu.
 
-    // Menu variables
+    // Menu variables.
     int screenWidth;
     int screenHeight;
     const char* windowTitle;
@@ -39,7 +35,6 @@ public:
     bool dragWindow;
     bool exitWindow;
     bool startbutton;
-    bool rungamebutton;
 
     // variables
     GameState currentstate;

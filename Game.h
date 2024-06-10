@@ -18,6 +18,13 @@ public:
     Board board;
     Vector2 selectedPos = { -1, -1 };  // position of the selected piece.
 
+    /*
+    int screenWidth;
+    int screenHeight;
+    Vector2 circlePosition;
+    int circleRadius;
+    void Update();
+    void Draw();*/
 };
 
 #endif // GAME_H
