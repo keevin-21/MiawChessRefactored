@@ -54,12 +54,16 @@ void Menu::Run()
 	LoadSounds();
 	LoadFonts();
 
+	Image iconImage = LoadImage((TEXTURES_PATH + "wm.png").c_str()); 
+	SetWindowIcon(iconImage); 
+
 	while (!exitWindow && !WindowShouldClose())
 	{
 		Update();
 		Draw();
 	}
 
+	UnloadImage(iconImage); 
 	Deinit();
 }
 

@@ -62,37 +62,39 @@ void Game::Init(const char* player1Name, const char* player2Name)
 
 void Game::Run()
 {
-	while (!WindowShouldClose())
+	while (!WindowShouldClose()) 
 	{
-		if(gameState == GAME_STATE::GS_RUNNING)
+		if(gameState == GAME_STATE::GS_RUNNING) 
 		{
-			HandleInput();
-			timer += GetFrameTime();
+			HandleInput(); 
+			timer += GetFrameTime(); 
 		}
 
-		if(gameState == GAME_STATE::GS_PROMOTION)
+		if(gameState == GAME_STATE::GS_PROMOTION) 
 		{
-			HandlePromotion();
+			HandlePromotion(); 
 		}
 
-		BeginDrawing();
+		BeginDrawing(); 
 		{
-			std::vector<Move> moveSelectedPiece;
+			DrawTexture(textures["MEAW_GAME"], 0, 0, WHITE); 
 
-			if (selectedPiece)
+			std::vector<Move> moveSelectedPiece; 
+
+			if (selectedPiece) 
 			{
-				moveSelectedPiece = possibleMoves.at(selectedPiece);
+				moveSelectedPiece = possibleMoves.at(selectedPiece); 
 			}
 
 			// Renderer.
-			Renderer::MouseCursor(board, moveSelectedPiece, turn, gameState == GAME_STATE::GS_PROMOTION);
+			Renderer::MouseCursor(board, moveSelectedPiece, turn, gameState == GAME_STATE::GS_PROMOTION); 
 			Renderer::Clear();
 			Renderer::RenderBackground();
 			Renderer::RenderPieces(board, textures);
 
 			if (gameState != GAME_STATE::GS_PROMOTION)
 			{
-				Renderer::RenderPossibleMoves(textures, moveSelectedPiece);
+				Renderer::RenderPossibleMoves(textures, moveSelectedPiece); 
 			}
 
 			Renderer::RenderGuide();
@@ -149,6 +151,9 @@ void Game::LoadTextures()
 
 		UnloadImage(image);
 	}
+
+	// Load Backgrounds
+	textures["MEAW_GAME"] = LoadTexture((TEXTURES_PATH + "MEAW_GAME.png").c_str()); 
 }
 
 void Game::LoadSounds()
