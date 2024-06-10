@@ -170,17 +170,13 @@ void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, P
 
 void Renderer::RenderInfo(int round, double timer)
 {
-    std::string roundText = "Round: " + std::to_string(round);
-    std::string timeText = "Time: " + std::to_string((int)timer) + "s";
+    std::string roundText = std::to_string(round); 
+    std::string timeText = std::to_string((int)timer) + "s"; 
 
-    int padding = 5;
-    int fontSize = 20;
+    int fontSize = 50; // Font size
 
-    int roundTextWidth = MeasureText(roundText.c_str(), fontSize);
-    int timeTextWidth = MeasureText(timeText.c_str(), fontSize);
-
-    DrawText(roundText.c_str(), padding, padding, fontSize, WHITE);
-    DrawText(timeText.c_str(), GetScreenWidth() - timeTextWidth - padding, padding, fontSize, WHITE);
+    DrawText(roundText.c_str(), 1120, 600, fontSize, WHITE); 
+    DrawText(timeText.c_str(), 120, 160, fontSize, WHITE); 
 }
 
 void Renderer::RenderEndGame(GAME_STATE gameState)

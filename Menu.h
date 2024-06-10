@@ -37,20 +37,25 @@ public:
     bool IsGameStarting() const;
 
     const char* GetPlayer1Name() const { return player1Name; }
-    const char* GetPlayer2Name() const { return player2Name; }
+    const char* GetPlayer2Name() const { return player2Name; } 
 
 private:
     MENU_STATE currentState;
 
     // Player names
-    char player1Name[20]; 
+    char player1Name[20];
     char player2Name[20];
-    int currentInputPlayer = 1; 
+    int currentInputPlayer;
+    bool showPlayer1Notice = false;
+    bool showPlayer2Notice = false;
 
     // Textures and sounds maps
     map<string, Texture2D> textures;
     map<string, Sound> sounds;
     map<string, Font> fonts;
+
+    // Music
+    bool musicPlaying;
 
     // Resource loading
     void LoadTextures();
@@ -62,6 +67,10 @@ private:
     void Draw();
     void DrawStartScreen();
     void DrawNamesScreen();
+
+    // Music Settings
+    void PlayMusic();
+    void StopMusic();
 
     // Button state
     bool dragWindow;

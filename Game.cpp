@@ -17,12 +17,13 @@ using std::string;
 const string Game::ASSETS_PATH = "assets/";
 const string Game::TEXTURES_PATH = ASSETS_PATH + "textures/";
 const string Game::SOUNDS_PATH = ASSETS_PATH + "sounds/";
+const string Game::FONTS_PATH = ASSETS_PATH + "fonts/";
 
 const Color Game::LIGHT_SHADE = Color{ 255, 217, 237, 255 };
 const Color Game::DARK_SHADE = Color{ 255, 104, 182, 255 };
 
-Game::Game(const string& p1Name, const string& p2Name)
-	: player1Name(p1Name), player2Name(p2Name)
+Game::Game(const std::string& p1Name, const std::string& p2Name)
+	: player1Name(p1Name), player2Name(p2Name) 
 {
 	// InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MeowChess");
 	InitAudioDevice();
@@ -31,6 +32,7 @@ Game::Game(const string& p1Name, const string& p2Name)
 
 	LoadTextures();
 	LoadSounds();
+	LoadFonts();
 
 	board.Init();
 	PossibleMoves();
@@ -48,16 +50,15 @@ Game::~Game()
 		UnloadSound(sound.second);
 	}
 
+	for (auto const& font : fonts)
+	{
+		UnloadFont(font.second); 
+	}
+
 	board.Clear();
 
 	CloseAudioDevice();
 	CloseWindow();
-}
-
-void Game::Init(const char* player1Name, const char* player2Name)
-{
-	this->player1Name = player1Name;
-	this->player2Name = player2Name;
 }
 
 void Game::Run()
@@ -77,6 +78,11 @@ void Game::Run()
 
 		BeginDrawing();
 		{
+			DrawTexture(textures["MEAW_GAME"], 0, 0, WHITE);
+			Font font = fonts["FONT1"]; 
+			DrawTextEx(font, player1Name.c_str(), Vector2{ 110, 325 }, 30, 2, BLACK); 
+			DrawTextEx(font, player2Name.c_str(), Vector2{ 1100, 350 }, 30, 2, BLACK);
+
 			std::vector<Move> moveSelectedPiece;
 
 			if (selectedPiece)
@@ -149,6 +155,9 @@ void Game::LoadTextures()
 
 		UnloadImage(image);
 	}
+
+	// Load Backgrounds
+	textures["MEAW_GAME"] = LoadTexture((TEXTURES_PATH + "MEAW_GAME.png").c_str());
 }
 
 void Game::LoadSounds()
@@ -165,6 +174,15 @@ void Game::LoadSounds()
 		std::string fileNameWithoutExtension = entry.path().filename().string().substr(0, dotIndex);
 		sounds[fileNameWithoutExtension] = sound;
 	}
+}
+
+void Game::LoadFonts()
+{
+	// Load Fonts
+	fonts["FONT1"] = LoadFont((FONTS_PATH + "Espressonal.otf").c_str()); 
+	fonts["FONT2"] = LoadFont((FONTS_PATH + "Sono-Bold.ttf").c_str()); 
+	fonts["FONT3"] = LoadFont((FONTS_PATH + "CoffeeFills.ttf").c_str()); 
+	fonts["FONT4"] = LoadFont((FONTS_PATH + "SuperCreamy.ttf").c_str()); 
 }
 
 void Game::HandleInput()
