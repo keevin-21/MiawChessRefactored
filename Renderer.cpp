@@ -81,14 +81,30 @@ void Renderer::RenderPossibleMoves(const std::map<string, Texture>& textures, co
 
     for (const Move& move : possibleMoves)
     {
-        DrawTexture(
-            textures.at(GetTextureFromMoveType(move.type)),
-            move.position.j * Game::CELL_SIZE + offsetX,
-            move.position.i * Game::CELL_SIZE + offsetY,
-            WHITE
-        );
+        if (move.pieceColor == PIECE_COLOR::C_WHITE) // Verificando el color de la pieza
+        {
+            std::cout << "Selected piece is a WHITE piece." << std::endl; // Mensaje de consola
+            DrawTexture(
+                textures.at("wm"),
+                move.position.j * Game::CELL_SIZE + offsetX,
+                move.position.i * Game::CELL_SIZE + offsetY,
+                WHITE
+            );
+        }
+        else if (move.pieceColor == PIECE_COLOR::C_BLACK) // Verificando el color de la pieza
+        {
+            std::cout << "Selected piece is a BLACK piece." << std::endl; // Mensaje de consola
+            DrawTexture(
+                textures.at("bm"),
+                move.position.j * Game::CELL_SIZE + offsetX,
+                move.position.i * Game::CELL_SIZE + offsetY,
+                WHITE
+            );
+        }
     }
 }
+
+
 
 void Renderer::RenderGuide()
 {
@@ -167,6 +183,7 @@ void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, P
         DrawText("Knight", offsetX + 5 * Game::CELL_SIZE + 9, textY, 20, WHITE);
     }
 }
+
 
 void Renderer::RenderInfo(int round, double timer)
 {
@@ -269,8 +286,6 @@ Color Renderer::GetShadeColor(PIECE_COLOR color)
 
 PIECE_COLOR Renderer::GetColorCell(const Position& cellPosition)
 {
-	int startingColorInRow = cellPosition.i % 2 == 0 ? 0 : 1;
-	int colorIndex = (startingColorInRow + cellPosition.j) % 2;
-
-	return colorIndex == 0 ? PIECE_COLOR::C_WHITE : PIECE_COLOR::C_BLACK;
+    // Si la suma de las coordenadas de la celda es par, es una casilla blanca, de lo contrario, es negra
+    return (cellPosition.i + cellPosition.j) % 2 == 0 ? PIECE_COLOR::C_WHITE : PIECE_COLOR::C_BLACK;
 }

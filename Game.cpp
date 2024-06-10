@@ -158,6 +158,7 @@ void Game::LoadTextures()
 
 	// Load Backgrounds
 	textures["MEAW_GAME"] = LoadTexture((TEXTURES_PATH + "MEAW_GAME.png").c_str());
+	textures["MEAW_START"] = LoadTexture((TEXTURES_PATH + "MEAW_START.png").c_str());
 }
 
 void Game::LoadSounds()
