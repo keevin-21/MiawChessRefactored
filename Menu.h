@@ -27,6 +27,7 @@ public:
     const static string TEXTURES_PATH;
     const static string SOUNDS_PATH;
     const static string ASSETS_PATH;
+    const static string FONTS_PATH;
 
     Menu();
     ~Menu();
@@ -49,10 +50,12 @@ private:
     // Textures and sounds maps
     map<string, Texture2D> textures;
     map<string, Sound> sounds;
+    map<string, Font> fonts;
 
     // Resource loading
     void LoadTextures();
     void LoadSounds();
+    void LoadFonts();
 
     // Utility methods
     void Update();

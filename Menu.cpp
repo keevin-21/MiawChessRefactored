@@ -11,6 +11,7 @@ using std::endl;
 const string Menu::ASSETS_PATH = "assets/";
 const string Menu::TEXTURES_PATH = ASSETS_PATH + "textures/";
 const string Menu::SOUNDS_PATH = ASSETS_PATH + "sounds/";
+const string Menu::FONTS_PATH = ASSETS_PATH + "fonts/"; 
 
 Menu::Menu() : currentState(MS_START), dragWindow(false), exitWindow(false)
 {
@@ -32,6 +33,10 @@ Menu::~Menu()
 	{
 		UnloadSound(sound.second); 
 	}
+	for (auto const& font : fonts)
+	{
+		UnloadFont(font.second); 
+	}
 }
 
 void Menu::Deinit()
@@ -47,6 +52,7 @@ void Menu::Run()
 
 	LoadTextures();
 	LoadSounds();
+	LoadFonts();
 
 	while (!exitWindow && !WindowShouldClose())
 	{
@@ -74,6 +80,15 @@ void Menu::LoadSounds()
 {
 	// Nothing for now
 	// sounds["example_sound"] = LoadSound((SOUNDS_PATH + "example_sound.wav").c_str());
+}
+
+void Menu::LoadFonts()
+{
+	// Load Fonts
+	fonts["FONT1"] = LoadFont((FONTS_PATH + "Espressonal.otf").c_str());
+	fonts["FONT2"] = LoadFont((FONTS_PATH + "Sono-Bold.ttf").c_str());
+	fonts["FONT3"] = LoadFont((FONTS_PATH + "CoffeeFills.ttf").c_str());
+	fonts["FONT4"] = LoadFont((FONTS_PATH + "SuperCreamy.ttf").c_str());
 }
 
 void Menu::Update()
@@ -234,17 +249,22 @@ void Menu::DrawNamesScreen()
 	// Background
 	DrawTexture(textures["MEAW_NAME"], 0, 0, WHITE);
 
+	// Fonts
+	// Font font1 = fonts["FONT1"];
+	// Font font2 = fonts["FONT2"];
+	Font font3 = fonts["FONT3"];
+
 	// PLAYER 1
 	Vector2 Save1Position = { 540, 305 }; 
 	DrawTextureEx(textures["MEAW_SAVE1"], Save1Position, 0.0f, 1.0f, WHITE); 
-	DrawRectangle(240, 305, 250, 50, SKYBLUE); 
-	DrawText(player1Name, 250, 310, 20, BLACK); 
+	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
+	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);  
 
 	// PLAYER 2
 	Vector2 Save2Position = { 1030, 305 }; 
 	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE); 
-	DrawRectangle(730, 305, 250, 50, SKYBLUE); 
-	DrawText(player2Name, 740, 310, 20, BLACK); 
+	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
+	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);  
 
 	// Next Button
 	Vector2 NextPosition = { 1200, 40 }; 
