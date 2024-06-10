@@ -77,6 +77,8 @@ void Game::Run()
 
 		BeginDrawing();
 		{
+			DrawTexture(textures["MEAW_GAME"], 0, 0, WHITE);
+
 			std::vector<Move> moveSelectedPiece;
 
 			if (selectedPiece)
@@ -149,6 +151,9 @@ void Game::LoadTextures()
 
 		UnloadImage(image);
 	}
+
+	// Load Backgrounds
+	textures["MEAW_GAME"] = LoadTexture((TEXTURES_PATH + "MEAW_GAME.png").c_str());
 }
 
 void Game::LoadSounds()
