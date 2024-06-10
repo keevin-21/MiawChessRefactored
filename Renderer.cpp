@@ -16,6 +16,23 @@ void Renderer::RenderBackground()
     int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
     int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
+    int boardWidth = 8 * Game::CELL_SIZE;
+    int boardHeight = 8 * Game::CELL_SIZE;
+
+    int thickness = 3; // Grosor del borde
+
+    Rectangle borderRect = {
+        static_cast<float>(offsetX - thickness),
+        static_cast<float>(offsetY - thickness),
+        static_cast<float>(boardWidth + 2 * thickness),
+        static_cast<float>(boardHeight + 2 * thickness)
+    };
+
+    Color borderColor = { 255, 104, 182, 255 }; // Color del borde del rectángulo
+
+    // Dibuja el rectángulo alrededor del tablero con el grosor especificado
+    DrawRectangleLinesEx(borderRect, thickness, borderColor);
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
@@ -96,7 +113,7 @@ void Renderer::RenderGuide()
         text[0] = '1' + (7 - i); // For 1-8 from top to bottom
         text[1] = '\0';
 
-        DrawText(text, x + offsetX - padding * 2, y, fontSize, textColor); // Adjust x position for centering
+        DrawText(text, x + offsetX - padding + 1, y - 35, fontSize, textColor); // Adjust x position for centering
     }
 
     // Render column letters (a-h) on the bottom side
@@ -110,7 +127,7 @@ void Renderer::RenderGuide()
         text[0] = 'a' + j; // For a-h from left to right
         text[1] = '\0';
 
-        DrawText(text, x, y, fontSize, textColor);
+        DrawText(text, x + 33, y + 16, fontSize, textColor);
     }
 }
 
