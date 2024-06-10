@@ -1,49 +1,73 @@
-#pragma once
+#ifndef MEOWCHESS_MENU_H
+#define MEOWCHESS_MENU_H
 
 #define _CRT_SECURE_NO_WARNINGS
 #include "raylib.h"
 #include "raygui.h"
 #include <string>
 #include <iostream>
+#include <map>
 
-using std::cout;
-using std::endl;
+using std::string;
+using std::map;
 
-// Class of game status, whether is the game screen or menu screen.
-
-enum class GameState {
-    MENU,
-    GAME
+enum MENU_STATE
+{
+    MS_START,
+    MS_NAMES,
+    MS_GAME
 };
 
 class Menu
 {
 public:
+    const static int WINDOW_WIDTH = 1280;
+    const static int WINDOW_HEIGHT = 720;
 
-    Menu(int width, int height, const char* gameTitle, Vector2 initPosition); // constructor
-    void Init(); // initialize variables.
-    ~Menu() { Deinit(); } // destructor and delete variables.
-    void Run(); // run game. start it.
-    void Deinit(); // delete variables
-    void Update(); // realize changes on the game.
-    void DrawBoardMenu(); // draw board menu.
-    void Draw(); // draw menu.
+    const static string TEXTURES_PATH;
+    const static string SOUNDS_PATH;
+    const static string ASSETS_PATH;
+    const static string FONTS_PATH;
 
-    // Menu variables
-    int screenWidth;
-    int screenHeight;
-    const char* windowTitle;
-    Vector2 mousePosition;
-    Vector2 windowPosition;
-    Vector2 panOffset;
+    Menu();
+    ~Menu();
+
+    void Run();
+    void Deinit();
+    bool IsGameStarting() const;
+
+    const char* GetPlayer1Name() const { return player1Name; }
+    const char* GetPlayer2Name() const { return player2Name; }
+
+private:
+    MENU_STATE currentState;
+
+    // Player names
+    char player1Name[20]; 
+    char player2Name[20];
+    int currentInputPlayer; 
+	bool showPlayer1Notice = false;
+	bool showPlayer2Notice = false;
+
+    // Textures and sounds maps
+    map<string, Texture2D> textures;
+    map<string, Sound> sounds;
+    map<string, Font> fonts;
+
+    // Resource loading
+    void LoadTextures();
+    void LoadSounds();
+    void LoadFonts();
+
+    // Utility methods
+    void Update();
+    void Draw();
+    void DrawStartScreen();
+    void DrawNamesScreen();
+
+    // Button state
     bool dragWindow;
     bool exitWindow;
-    bool startbutton;
-    bool rungamebutton;
-
-    // variables
-    GameState currentstate;
-    std::string player1; // Player 1 name.
-    char nameBuffer[21];  // Buffer to save the name of the player.
-
 };
+
+#endif // MEOWCHESS_MENU_H

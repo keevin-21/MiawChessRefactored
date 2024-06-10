@@ -1,0 +1,18 @@
+#ifndef MEOWCHESS_PIECEENUMS_H
+#define MEOWCHESS_PIECEENUMS_H
+
+enum PIECE_TYPE {
+    PAWN,
+    ROOK,
+    KNIGHT,
+    BISHOP,
+    QUEEN,
+    KING
+};
+
+enum PIECE_COLOR {
+    C_WHITE,
+    C_BLACK
+};
+
+#endif //MEOWCHESS_PIECEENUMS_H
