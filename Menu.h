@@ -54,9 +54,6 @@ private:
     map<string, Sound> sounds;
     map<string, Font> fonts;
 
-    // Music
-    bool musicPlaying; 
-
     // Resource loading
     void LoadTextures();
     void LoadSounds();
@@ -67,10 +64,6 @@ private:
     void Draw();
     void DrawStartScreen();
     void DrawNamesScreen();
-
-    // Music Settings
-    void PlayMusic();
-    void StopMusic();
 
     // Button state
     bool dragWindow;
