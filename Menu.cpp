@@ -11,15 +11,10 @@ using std::endl;
 const string Menu::ASSETS_PATH = "assets/";
 const string Menu::TEXTURES_PATH = ASSETS_PATH + "textures/";
 const string Menu::SOUNDS_PATH = ASSETS_PATH + "sounds/";
-const string Menu::FONTS_PATH = ASSETS_PATH + "fonts/"; 
+const string Menu::FONTS_PATH = ASSETS_PATH + "fonts/";
 
-Menu::Menu() : currentState(MS_START), dragWindow(false), exitWindow(false), musicPlaying(false), currentInputPlayer(0) 
+Menu::Menu() : currentState(MS_START), dragWindow(false), exitWindow(false), musicPlaying(false), currentInputPlayer(0)
 {
-    SetConfigFlags(FLAG_WINDOW_UNDECORATED);
-    InitWindow(screenWidth, screenHeight, windowTitle);
-    SetWindowPosition(windowPosition.x, windowPosition.y);
-    dragWindow = false;
-    exitWindow = false;
 	SetTargetFPS(60);
 
 	// Initialize player names with empty strings
@@ -36,11 +31,11 @@ Menu::~Menu()
 
 	for (auto const& sound : sounds)
 	{
-		UnloadSound(sound.second); 
+		UnloadSound(sound.second);
 	}
 	for (auto const& font : fonts)
 	{
-		UnloadFont(font.second); 
+		UnloadFont(font.second);
 	}
 }
 
@@ -59,8 +54,8 @@ void Menu::Run()
 	LoadSounds();
 	LoadFonts();
 
-	Image iconImage = LoadImage((TEXTURES_PATH + "wm.png").c_str()); 
-	SetWindowIcon(iconImage); 
+	Image iconImage = LoadImage((TEXTURES_PATH + "wm.png").c_str());
+	SetWindowIcon(iconImage);
 
 	while (!exitWindow && !WindowShouldClose())
 	{
@@ -68,7 +63,7 @@ void Menu::Run()
 		Draw();
 	}
 
-	UnloadImage(iconImage); 
+	UnloadImage(iconImage);
 	Deinit();
 }
 
@@ -106,22 +101,22 @@ void Menu::Update()
 	switch (currentState)
 	{
 	case MS_START:
-		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 		{
-			Vector2 mousePos = GetMousePosition(); 
+			Vector2 mousePos = GetMousePosition();
 			// Get the dimensions of the MEAW_PLAY texture
-			int playButtonWidth = textures["MEAW_PLAY"].width;  
-			int playButtonHeight = textures["MEAW_PLAY"].height; 
+			int playButtonWidth = textures["MEAW_PLAY"].width;
+			int playButtonHeight = textures["MEAW_PLAY"].height;
 			// Get the dimensions of the MEAW_MUSIC texture
-			int musicButtonWidth = textures["MEAW_MUSIC"].width; 
-			int musicButtonHeight = textures["MEAW_MUSIC"].height; 
+			int musicButtonWidth = textures["MEAW_MUSIC"].width;
+			int musicButtonHeight = textures["MEAW_MUSIC"].height;
 
 			// Check if the "Play" button is clicked
-			if (mousePos.x > 580 && mousePos.x < 580 + playButtonWidth && 
-				mousePos.y > 585 && mousePos.y < 585 + playButtonHeight) 
+			if (mousePos.x > 580 && mousePos.x < 580 + playButtonWidth &&
+				mousePos.y > 585 && mousePos.y < 585 + playButtonHeight)
 			{
 				cout << "----------- PLAY -----------" << endl;
-				currentState = MS_NAMES; 
+				currentState = MS_NAMES;
 			}
 
 			// Check if the "Music" button is clicked
@@ -130,15 +125,15 @@ void Menu::Update()
 			{
 				cout << "----------- MUSIC -----------" << endl;
 				// Logic for music
-				if (musicPlaying) 
+				if (musicPlaying)
 				{
 					cout << "----------- STOP MUSIC -----------" << endl;
-					StopMusic(); 
+					StopMusic();
 				}
 				else
 				{
 					cout << "----------- PLAY MUSIC -----------" << endl;
-					PlayMusic(); 
+					PlayMusic();
 				}
 			}
 		}
@@ -167,7 +162,7 @@ void Menu::Update()
 			}
 			if (CheckCollisionPointRec(mousePos, { 730, 305, 250, 50 }))
 			{
-				currentInputPlayer = 2; 
+				currentInputPlayer = 2;
 			}
 
 			// Check if the "Save 1" button is clicked
@@ -180,6 +175,7 @@ void Menu::Update()
 				player1Name[sizeof(player1Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
 				cout << "Player 1 game: " << player1Name << endl;
 				currentInputPlayer = 1;
+				showPlayer1Notice = true;
 			}
 
 			// Check if the "Save 2" button is clicked
@@ -188,10 +184,11 @@ void Menu::Update()
 			{
 				// Save the name entered in player2Name
 				cout << "----------- SAVE 2 -----------" << endl;
-				strncpy(player2Name, GetPlayer2Name(), sizeof(player2Name) - 1); 
+				strncpy(player2Name, GetPlayer2Name(), sizeof(player2Name) - 1);
 				player2Name[sizeof(player2Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
-				cout << "Player 2 game: " << player2Name << endl;  
-				currentInputPlayer = 2; 
+				cout << "Player 2 game: " << player2Name << endl;
+				currentInputPlayer = 2;
+				showPlayer2Notice = true;
 			}
 
 			// Check if the "Next" button is clicked
@@ -199,15 +196,15 @@ void Menu::Update()
 				mousePos.y > 25 && mousePos.y < 25 + nextButtonHeight)
 			{
 				cout << "----------- NEXT -----------" << endl;
-				StopMusic(); 
+				StopMusic();
 				currentState = MS_GAME;
 			}
 
 			if (mousePos.x > 30 && mousePos.x < 30 + homeButtonWidth &&
-				mousePos.y > 25 && mousePos.y < 25 + homeButtonHeight) 
+				mousePos.y > 25 && mousePos.y < 25 + homeButtonHeight)
 			{
 				cout << "----------- HOME -----------" << endl;
-				currentState = MS_START; 
+				currentState = MS_START;
 			}
 		}
 
@@ -280,13 +277,13 @@ bool Menu::IsGameStarting() const
 void Menu::DrawStartScreen()
 {
 	// Background
-	DrawTexture(textures["MEAW_START"], 0, 0, WHITE); 
+	DrawTexture(textures["MEAW_START"], 0, 0, WHITE);
 	// Play Button
 	Vector2 PlayPosition = { 580, 585 };
 	DrawTextureEx(textures["MEAW_PLAY"], PlayPosition, 0.0f, 1.0f, WHITE);
 	// Music Button
 	Vector2 MusicPosition = { 30, 25 };
-	DrawTextureEx(textures["MEAW_MUSIC"], MusicPosition, 0.0f, 1.0f, WHITE); 
+	DrawTextureEx(textures["MEAW_MUSIC"], MusicPosition, 0.0f, 1.0f, WHITE);
 }
 
 void Menu::DrawNamesScreen()
@@ -300,26 +297,34 @@ void Menu::DrawNamesScreen()
 	Font font3 = fonts["FONT3"];
 
 	// PLAYER 1
-	Vector2 Save1Position = { 540, 305 }; 
-	DrawTextureEx(textures["MEAW_SAVE1"], Save1Position, 0.0f, 1.0f, WHITE); 
-	if (currentInputPlayer == 1) { 
-		DrawRectangleRoundedLines(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK); 
+	Vector2 Save1Position = { 540, 305 };
+	DrawTextureEx(textures["MEAW_SAVE1"], Save1Position, 0.0f, 1.0f, WHITE);
+	if (currentInputPlayer == 1) {
+		DrawRectangleRoundedLines(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK);
 	}
-	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
-	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);  
+	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);
+	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);
+	if (showPlayer1Notice) 
+	{
+		DrawTextEx(font3, "Player 1 Name was choose", Vector2{ 285, 370 }, 15, 2, Color{ 255, 52, 174, 255 }); 
+	}
 
 	// PLAYER 2
-	Vector2 Save2Position = { 1030, 305 }; 
-	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE); 
-	if (currentInputPlayer == 2) { 
-		DrawRectangleRoundedLines(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK); 
+	Vector2 Save2Position = { 1030, 305 };
+	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE);
+	if (currentInputPlayer == 2) {
+		DrawRectangleRoundedLines(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK);
 	}
-	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
-	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);  
+	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);
+	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);
+	if (showPlayer2Notice) 
+	{
+		DrawTextEx(font3, "Player 2 Name was choose", Vector2{ 780, 370 }, 15, 2, Color{ 255, 52, 174, 255 }); 
+	}
 
 	// Next Button
-	Vector2 NextPosition = { 1210, 25 }; 
-	DrawTextureEx(textures["MEAW_NEXT"], NextPosition, 0.0f, 1.0f, WHITE); 
+	Vector2 NextPosition = { 1210, 25 };
+	DrawTextureEx(textures["MEAW_NEXT"], NextPosition, 0.0f, 1.0f, WHITE);
 
 	// Home Button
 	Vector2 HomePosition = { 30, 25 };
@@ -328,13 +333,13 @@ void Menu::DrawNamesScreen()
 
 void Menu::PlayMusic()
 {
-	PlaySound(sounds["BACKGROUND"]); 
+	PlaySound(sounds["BACKGROUND"]);
 	SetSoundVolume(sounds["BACKGROUND"], 0.5f); // Volume 
-	musicPlaying = true; 
+	musicPlaying = true;
 }
 
 void Menu::StopMusic()
 {
-	StopSound(sounds["BACKGROUND"]); 
-	musicPlaying = false; 
+	StopSound(sounds["BACKGROUND"]);
+	musicPlaying = false;
 }

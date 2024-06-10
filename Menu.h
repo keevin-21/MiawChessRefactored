@@ -46,6 +46,8 @@ private:
     char player1Name[20]; 
     char player2Name[20];
     int currentInputPlayer; 
+    bool showPlayer1Notice = false;
+    bool showPlayer2Notice = false;
 
     // Textures and sounds maps
     map<string, Texture2D> textures;
