@@ -37,7 +37,7 @@ public:
     bool IsGameStarting() const;
 
     const char* GetPlayer1Name() const { return player1Name; }
-    const char* GetPlayer2Name() const { return player2Name; }
+    const char* GetPlayer2Name() const { return player2Name; } 
 
 private:
     MENU_STATE currentState;

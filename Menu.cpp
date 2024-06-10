@@ -172,7 +172,7 @@ void Menu::Update()
 				// Save the name entered in player1Name
 				cout << "----------- SAVE 1 -----------" << endl;
 				strncpy(player1Name, GetPlayer1Name(), sizeof(player1Name) - 1);
-				player1Name[sizeof(player1Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
+				player1Name[sizeof(player1Name) - 1] = '\0'; 
 				cout << "Player 1 game: " << player1Name << endl;
 				currentInputPlayer = 1;
 				showPlayer1Notice = true;
@@ -185,7 +185,7 @@ void Menu::Update()
 				// Save the name entered in player2Name
 				cout << "----------- SAVE 2 -----------" << endl;
 				strncpy(player2Name, GetPlayer2Name(), sizeof(player2Name) - 1);
-				player2Name[sizeof(player2Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
+				player2Name[sizeof(player2Name) - 1] = '\0';
 				cout << "Player 2 game: " << player2Name << endl;
 				currentInputPlayer = 2;
 				showPlayer2Notice = true;
@@ -312,7 +312,7 @@ void Menu::DrawNamesScreen()
 	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);
 	if (showPlayer1Notice)
 	{
-		DrawTextEx(font3, "Player 1 Name was choose", Vector2{ 285, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
+		DrawTextEx(font3, "Player 1 Name was choosen", Vector2{ 285, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
 	}
 
 	// PLAYER 2
@@ -325,7 +325,7 @@ void Menu::DrawNamesScreen()
 	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);
 	if (showPlayer2Notice)
 	{
-		DrawTextEx(font3, "Player 2 Name was choose", Vector2{ 780, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
+		DrawTextEx(font3, "Player 2 Name was choosen", Vector2{ 780, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
 	}
 
 	// Next Button

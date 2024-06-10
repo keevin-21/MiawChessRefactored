@@ -27,21 +27,22 @@ public:
 	const static int WINDOW_HEIGHT = 720;
 	const static int CELL_SIZE = 80;
 	const static int INFO_BAR_HEIGHT = 32;
-	
+
 	const static Color LIGHT_SHADE;
 	const static Color DARK_SHADE;
 
 	const static string TEXTURES_PATH;
 	const static string SOUNDS_PATH;
 	const static string ASSETS_PATH;
+	const static string FONTS_PATH;
 
-	Game(const string& player1Name, const string& player2Name);
+	Game(const std::string& p1Name, const std::string& p2Name);  
 	~Game();
 
-	void Init(const char* player1Name, const char* player2Name);
 	void Run();
 	void SwapTurn();
 
+	// Font GetFont(string name) { return fonts.find(name); };
 
 private:
 	string player1Name;
@@ -49,6 +50,7 @@ private:
 
 	void LoadTextures();
 	void LoadSounds();
+	void LoadFonts();
 
 	void HandleInput();
 	void HandlePromotion();
@@ -64,6 +66,7 @@ private:
 	// Textures and sounds.
 	std::map<string, Texture> textures;
 	std::map<string, Sound> sounds;
+	std::map<string, Font> fonts; 
 
 	// Game state.
 	Board board;
