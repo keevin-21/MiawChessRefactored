@@ -13,7 +13,7 @@ const string Menu::TEXTURES_PATH = ASSETS_PATH + "textures/";
 const string Menu::SOUNDS_PATH = ASSETS_PATH + "sounds/";
 const string Menu::FONTS_PATH = ASSETS_PATH + "fonts/"; 
 
-Menu::Menu() : currentState(MS_START), dragWindow(false), exitWindow(false)
+Menu::Menu() : currentState(MS_START), dragWindow(false), exitWindow(false), musicPlaying(false), currentInputPlayer(0) 
 {
 	SetTargetFPS(60);
 
@@ -71,15 +71,16 @@ void Menu::LoadTextures()
 
 	// Load Buttons
 	textures["MEAW_PLAY"] = LoadTexture((TEXTURES_PATH + "MEAW_PLAY.png").c_str());
+	textures["MEAW_MUSIC"] = LoadTexture((TEXTURES_PATH + "MEAW_MUSIC.png").c_str());
 	textures["MEAW_SAVE1"] = LoadTexture((TEXTURES_PATH + "MEAW_SAVE1.png").c_str());
 	textures["MEAW_SAVE2"] = LoadTexture((TEXTURES_PATH + "MEAW_SAVE2.png").c_str());
 	textures["MEAW_NEXT"] = LoadTexture((TEXTURES_PATH + "MEAW_NEXT.png").c_str());
+	textures["MEAW_HOME"] = LoadTexture((TEXTURES_PATH + "MEAW_HOME.png").c_str());
 }
 
 void Menu::LoadSounds()
 {
-	// Nothing for now
-	// sounds["example_sound"] = LoadSound((SOUNDS_PATH + "example_sound.wav").c_str());
+	sounds["BACKGROUND"] = LoadSound((SOUNDS_PATH + "background.mp3").c_str());
 }
 
 void Menu::LoadFonts()
@@ -102,6 +103,9 @@ void Menu::Update()
 			// Get the dimensions of the MEAW_PLAY texture
 			int playButtonWidth = textures["MEAW_PLAY"].width;  
 			int playButtonHeight = textures["MEAW_PLAY"].height; 
+			// Get the dimensions of the MEAW_MUSIC texture
+			int musicButtonWidth = textures["MEAW_MUSIC"].width; 
+			int musicButtonHeight = textures["MEAW_MUSIC"].height; 
 
 			// Check if the "Play" button is clicked
 			if (mousePos.x > 580 && mousePos.x < 580 + playButtonWidth && 
@@ -109,6 +113,24 @@ void Menu::Update()
 			{
 				cout << "----------- PLAY -----------" << endl;
 				currentState = MS_NAMES; 
+			}
+
+			// Check if the "Music" button is clicked
+			if (mousePos.x > 30 && mousePos.x < 30 + playButtonWidth &&
+				mousePos.y > 25 && mousePos.y < 25 + playButtonHeight)
+			{
+				cout << "----------- MUSIC -----------" << endl;
+				// Logic for music
+				if (musicPlaying) 
+				{
+					cout << "----------- STOP MUSIC -----------" << endl;
+					StopMusic(); 
+				}
+				else
+				{
+					cout << "----------- PLAY MUSIC -----------" << endl;
+					PlayMusic(); 
+				}
 			}
 		}
 		break;
@@ -126,6 +148,9 @@ void Menu::Update()
 			// Get the dimensions of the MEAW_NEXT texture
 			int nextButtonWidth = textures["MEAW_NEXT"].width;
 			int nextButtonHeight = textures["MEAW_NEXT"].height;
+			// Get the dimensions of the MEAW_NEXT texture
+			int homeButtonWidth = textures["MEAW_HOME"].width;
+			int homeButtonHeight = textures["MEAW_HOME"].height;
 
 			if (CheckCollisionPointRec(mousePos, { 240, 305, 250, 50 }))
 			{
@@ -144,7 +169,7 @@ void Menu::Update()
 				cout << "----------- SAVE 1 -----------" << endl;
 				strncpy(player1Name, GetPlayer1Name(), sizeof(player1Name) - 1);
 				player1Name[sizeof(player1Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
-				cout << "Nombre del jugador 1 guardado: " << player1Name << endl;
+				cout << "Player 1 game: " << player1Name << endl;
 				currentInputPlayer = 1;
 			}
 
@@ -156,16 +181,24 @@ void Menu::Update()
 				cout << "----------- SAVE 2 -----------" << endl;
 				strncpy(player2Name, GetPlayer2Name(), sizeof(player2Name) - 1); 
 				player2Name[sizeof(player2Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
-				cout << "Nombre del jugador 2 guardado: " << player2Name << endl;  
+				cout << "Player 2 game: " << player2Name << endl;  
 				currentInputPlayer = 2; 
 			}
 
 			// Check if the "Next" button is clicked
-			if (mousePos.x > 1200 && mousePos.x < 1200 + nextButtonWidth &&
-				mousePos.y > 40 && mousePos.y < 40 + nextButtonHeight)
+			if (mousePos.x > 1210 && mousePos.x < 1210 + nextButtonWidth &&
+				mousePos.y > 25 && mousePos.y < 25 + nextButtonHeight)
 			{
 				cout << "----------- NEXT -----------" << endl;
+				StopMusic(); 
 				currentState = MS_GAME;
+			}
+
+			if (mousePos.x > 30 && mousePos.x < 30 + homeButtonWidth &&
+				mousePos.y > 25 && mousePos.y < 25 + homeButtonHeight) 
+			{
+				cout << "----------- HOME -----------" << endl;
+				currentState = MS_START; 
 			}
 		}
 
@@ -242,6 +275,9 @@ void Menu::DrawStartScreen()
 	// Play Button
 	Vector2 PlayPosition = { 580, 585 };
 	DrawTextureEx(textures["MEAW_PLAY"], PlayPosition, 0.0f, 1.0f, WHITE);
+	// Music Button
+	Vector2 MusicPosition = { 30, 25 };
+	DrawTextureEx(textures["MEAW_MUSIC"], MusicPosition, 0.0f, 1.0f, WHITE); 
 }
 
 void Menu::DrawNamesScreen()
@@ -257,16 +293,39 @@ void Menu::DrawNamesScreen()
 	// PLAYER 1
 	Vector2 Save1Position = { 540, 305 }; 
 	DrawTextureEx(textures["MEAW_SAVE1"], Save1Position, 0.0f, 1.0f, WHITE); 
+	if (currentInputPlayer == 1) { 
+		DrawRectangleRoundedLines(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK); 
+	}
 	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
 	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);  
 
 	// PLAYER 2
 	Vector2 Save2Position = { 1030, 305 }; 
 	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE); 
+	if (currentInputPlayer == 2) { 
+		DrawRectangleRoundedLines(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK); 
+	}
 	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
 	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);  
 
 	// Next Button
-	Vector2 NextPosition = { 1200, 40 }; 
+	Vector2 NextPosition = { 1210, 25 }; 
 	DrawTextureEx(textures["MEAW_NEXT"], NextPosition, 0.0f, 1.0f, WHITE); 
+
+	// Home Button
+	Vector2 HomePosition = { 30, 25 };
+	DrawTextureEx(textures["MEAW_HOME"], HomePosition, 0.0f, 1.0f, WHITE);
+}
+
+void Menu::PlayMusic()
+{
+	PlaySound(sounds["BACKGROUND"]); 
+	SetSoundVolume(sounds["BACKGROUND"], 0.5f); // Volume 
+	musicPlaying = true; 
+}
+
+void Menu::StopMusic()
+{
+	StopSound(sounds["BACKGROUND"]); 
+	musicPlaying = false; 
 }
