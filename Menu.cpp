@@ -175,6 +175,7 @@ void Menu::Update()
 				player1Name[sizeof(player1Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
 				cout << "Player 1 game: " << player1Name << endl;
 				currentInputPlayer = 1;
+				showPlayer1Notice = true;
 			}
 
 			// Check if the "Save 2" button is clicked
@@ -187,6 +188,7 @@ void Menu::Update()
 				player2Name[sizeof(player2Name) - 1] = '\0'; // Asegúrate de que el string termina con '\0'  
 				cout << "Player 2 game: " << player2Name << endl;  
 				currentInputPlayer = 2; 
+				showPlayer2Notice = true;
 			}
 
 			// Check if the "Next" button is clicked
@@ -303,6 +305,11 @@ void Menu::DrawNamesScreen()
 	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
 	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);  
 
+	if (showPlayer1Notice)
+	{
+		DrawTextEx(font3, "El jugador 1 fue elegido", Vector2{ 285, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
+	}
+
 	// PLAYER 2
 	Vector2 Save2Position = { 1030, 305 }; 
 	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE); 
@@ -311,6 +318,11 @@ void Menu::DrawNamesScreen()
 	}
 	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);  
 	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);  
+
+	if (showPlayer2Notice)
+	{
+		DrawTextEx(font3, "El jugador 2 fue elegido", Vector2{ 780, 370 }, 15, 2, Color{ 255, 52, 174, 255 });
+	}
 
 	// Next Button
 	Vector2 NextPosition = { 1210, 25 }; 
