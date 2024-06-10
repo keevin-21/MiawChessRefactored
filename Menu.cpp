@@ -200,10 +200,16 @@ void Menu::Update()
 				currentState = MS_GAME;
 			}
 
+			// Check if the "Home" button is clicked
 			if (mousePos.x > 30 && mousePos.x < 30 + homeButtonWidth &&
 				mousePos.y > 25 && mousePos.y < 25 + homeButtonHeight)
 			{
 				cout << "----------- HOME -----------" << endl;
+				memset(player1Name, 0, sizeof(player1Name)); 
+				memset(player2Name, 0, sizeof(player2Name)); 
+				currentInputPlayer = 0; 
+				showPlayer1Notice = false; 
+				showPlayer2Notice = false; 
 				currentState = MS_START;
 			}
 		}
