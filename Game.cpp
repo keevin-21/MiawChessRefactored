@@ -80,7 +80,7 @@ void Game::Run()
 		BeginDrawing();
 		{
 			DrawTexture(textures["MEAW_GAME"], 0, 0, WHITE);
-			Font font = fonts["FONT3"]; 
+			Font font = fonts["FONT1"]; 
 			DrawTextEx(font, player1Name.c_str(), Vector2{ 65, 380 }, 40, 2, BLACK); 
 			DrawTextEx(font, player2Name.c_str(), Vector2{ 1070, 320 }, 40, 2, BLACK);
 
