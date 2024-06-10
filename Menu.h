@@ -45,15 +45,12 @@ private:
     // Player names
     char player1Name[20]; 
     char player2Name[20];
-    int currentInputPlayer; 
+    int currentInputPlayer = 1; 
 
     // Textures and sounds maps
     map<string, Texture2D> textures;
     map<string, Sound> sounds;
     map<string, Font> fonts;
-
-    // Music
-    bool musicPlaying; 
 
     // Resource loading
     void LoadTextures();
@@ -65,10 +62,6 @@ private:
     void Draw();
     void DrawStartScreen();
     void DrawNamesScreen();
-
-    // Music Settings
-    void PlayMusic();
-    void StopMusic();
 
     // Button state
     bool dragWindow;
