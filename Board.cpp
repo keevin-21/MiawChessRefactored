@@ -67,6 +67,7 @@ void Board::Init()
     Add(new King({ 7, 4 }, PIECE_COLOR::C_WHITE));
 }
 
+
 Piece* Board::At(const Position& position) const
 {
     if(!IsPositionWithinLimits(position))

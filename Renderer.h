@@ -4,6 +4,8 @@
 #include "raylib.h"
 #include "Piece.h"
 #include "Game.h"
+#include <thread>
+#include <chrono>
 
 using std::string;
 

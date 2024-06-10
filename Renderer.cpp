@@ -2,6 +2,7 @@
 #include "Game.h"
 
 #include <algorithm>
+#include <iostream>
 
 void Renderer::Clear()
 {
@@ -81,12 +82,42 @@ void Renderer::RenderPossibleMoves(const std::map<string, Texture>& textures, co
 
     for (const Move& move : possibleMoves)
     {
-        DrawTexture(
-            textures.at(GetTextureFromMoveType(move.type)),
-            move.position.j * Game::CELL_SIZE + offsetX,
-            move.position.i * Game::CELL_SIZE + offsetY,
-            WHITE
-        );
+        // Se obtiene el color de la pieza que realiza el movimiento
+        PIECE_COLOR pieceColor = Piece::GetInverseColor(C_BLACK);
+
+        // Se verifica el tipo de movimiento
+        if (move.type == MOVES::STEP || move.type == MOVES::ATTACK || move.type == MOVES::DOUBLE_STEP)
+        {
+            // Se dibuja la textura correspondiente al color de la pieza
+            if (pieceColor == PIECE_COLOR::C_WHITE)
+            {
+                DrawTexture(
+                    textures.at("wm"),
+                    move.position.j * Game::CELL_SIZE + offsetX,
+                    move.position.i * Game::CELL_SIZE + offsetY,
+                    WHITE
+                );
+            }
+            else if (pieceColor == PIECE_COLOR::C_BLACK)
+            {
+                DrawTexture(
+                    textures.at("bm"),
+                    move.position.j * Game::CELL_SIZE + offsetX,
+                    move.position.i * Game::CELL_SIZE + offsetY,
+                    WHITE
+                );
+            }
+        }
+        else
+        {
+            // Para otros tipos de movimientos, se usa la textura estándar
+            DrawTexture(
+                textures.at(GetTextureFromMoveType(move.type)),
+                move.position.j * Game::CELL_SIZE + offsetX,
+                move.position.i * Game::CELL_SIZE + offsetY,
+                WHITE
+            );
+        }
     }
 }
 
@@ -131,7 +162,7 @@ void Renderer::RenderGuide()
     }
 }
 
-void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, PIECE_COLOR pawnColor)
+void Renderer::RenderPromotion(const std::map<std::string, Texture>& texture, PIECE_COLOR pawnColor)
 {
     int windowWidth = GetScreenWidth();
     int windowHeight = GetScreenHeight();
@@ -139,8 +170,7 @@ void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, P
     int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
     int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
-    DrawRectangle(offsetX, offsetY, 8 * Game::CELL_SIZE, 8 * Game::CELL_SIZE, Color{ 0, 0, 0, 127 });
-    DrawText("Promotion", offsetX + (windowWidth / 2) - 98, offsetY + (windowHeight / 4), 40, WHITE);
+    // DrawRectangle(offsetX, offsetY, 8 * Game::CELL_SIZE, 8 * Game::CELL_SIZE, Color{ 0, 0, 0, 127 });
 
     string prefix = pawnColor == PIECE_COLOR::C_WHITE ? "w" : "b";
 
@@ -148,22 +178,22 @@ void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, P
     int textY = offsetY + 4 * Game::CELL_SIZE + 5;
 
     {
-        DrawTexture(textures.at(prefix + "q"), offsetX + 2 * Game::CELL_SIZE, textureY, WHITE);
+        DrawTexture(texture.at(prefix + "q"), offsetX + 2 * Game::CELL_SIZE, textureY, WHITE);
         DrawText("Queen", offsetX + 2 * Game::CELL_SIZE + 9, textY, 20, WHITE);
     }
 
     {
-        DrawTexture(textures.at(prefix + "r"), offsetX + 3 * Game::CELL_SIZE, textureY, WHITE);
+        DrawTexture(texture.at(prefix + "r"), offsetX + 3 * Game::CELL_SIZE, textureY, WHITE);
         DrawText("Rook", offsetX + 3 * Game::CELL_SIZE + 14, textY, 20, WHITE);
     }
 
     {
-        DrawTexture(textures.at(prefix + "b"), offsetX + 4 * Game::CELL_SIZE, textureY, WHITE);
+        DrawTexture(texture.at(prefix + "b"), offsetX + 4 * Game::CELL_SIZE, textureY, WHITE);
         DrawText("Bishop", offsetX + 4 * Game::CELL_SIZE + 7, textY, 20, WHITE);
     }
 
     {
-        DrawTexture(textures.at(prefix + "n"), offsetX + 5 * Game::CELL_SIZE, textureY, WHITE);
+        DrawTexture(texture.at(prefix + "n"), offsetX + 5 * Game::CELL_SIZE, textureY, WHITE);
         DrawText("Knight", offsetX + 5 * Game::CELL_SIZE + 9, textY, 20, WHITE);
     }
 }
@@ -175,28 +205,25 @@ void Renderer::RenderInfo(int round, double timer)
 
     int fontSize = 50; // Font size
 
-    DrawText(roundText.c_str(), 1120, 600, fontSize, WHITE); 
-    DrawText(timeText.c_str(), 120, 160, fontSize, WHITE); 
+    DrawText(roundText.c_str(), 1130, 625, fontSize, WHITE); 
+    DrawText(timeText.c_str(), 90, 125, fontSize, WHITE); 
 }
 
 void Renderer::RenderEndGame(GAME_STATE gameState)
 {
 	DrawRectangle(0, 0, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, Color{ 0, 0, 0, 127 });
 
-	const char* text{}; //{}
-
 	if (gameState == GAME_STATE::GS_WHITE_WON) {
-		text = "WHITE WINS !";
+        DrawTexture(LoadTexture("assets/textures/MEAW_WWON.png"), 0, 0, WHITE);
 	}
 	else if (gameState == GAME_STATE::GS_BLACK_WON) {
-		text = "BLACK WINS !";
+        DrawTexture(LoadTexture("assets/textures/MEAW_BWON.png"), 0, 0, WHITE);
 	}
 	else if (gameState == GAME_STATE::GS_STALEMATE) {
-		text = "STALEMATE";
+        DrawTexture(LoadTexture("assets/textures/MEAW_STALEMATE.png"), 0, 0, WHITE);
 	}
 
-	int textLength = MeasureText(text, 40);
-	DrawText(text, Game::WINDOW_WIDTH / 2 - textLength / 2, Game::WINDOW_HEIGHT / 2, 40, WHITE);
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 void Renderer::MouseCursor(const Board& board, const std::vector<Move>& possibleMoves, PIECE_COLOR turn, bool inPromotion)
