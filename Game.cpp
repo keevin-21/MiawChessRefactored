@@ -21,9 +21,10 @@ const string Game::SOUNDS_PATH = ASSETS_PATH + "sounds/";
 const Color Game::LIGHT_SHADE = Color{ 255, 217, 237, 255 };
 const Color Game::DARK_SHADE = Color{ 255, 104, 182, 255 };
 
-Game::Game()
+Game::Game(const string& p1Name, const string& p2Name)
+	: player1Name(p1Name), player2Name(p2Name)
 {
-	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MeowChess");
+	// InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MeowChess");
 	InitAudioDevice();
 
 	SetTargetFPS(60);
@@ -51,6 +52,12 @@ Game::~Game()
 
 	CloseAudioDevice();
 	CloseWindow();
+}
+
+void Game::Init(const char* player1Name, const char* player2Name)
+{
+	this->player1Name = player1Name;
+	this->player2Name = player2Name;
 }
 
 void Game::Run()

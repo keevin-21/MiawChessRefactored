@@ -35,14 +35,18 @@ public:
 	const static string SOUNDS_PATH;
 	const static string ASSETS_PATH;
 
-	Game();
+	Game(const string& player1Name, const string& player2Name);
 	~Game();
 
+	void Init(const char* player1Name, const char* player2Name);
 	void Run();
 	void SwapTurn();
 
 
 private:
+	string player1Name;
+	string player2Name;
+
 	void LoadTextures();
 	void LoadSounds();
 
