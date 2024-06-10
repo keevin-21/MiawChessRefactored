@@ -4,9 +4,13 @@
 #include "raylib.h"
 #include "Piece.h"
 #include "Game.h"
+
 #include "Moves.h" // Incluye la definición de Move
 #include "Piece.h"
 #include <iostream>
+
+#include <thread>
+#include <chrono>
 
 using std::string;
 using std::cout;

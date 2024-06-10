@@ -10,6 +10,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include "raylib.h"
 
 namespace fs = std::filesystem;
 using std::string;
@@ -79,9 +80,9 @@ void Game::Run()
 		BeginDrawing();
 		{
 			DrawTexture(textures["MEAW_GAME"], 0, 0, WHITE);
-			Font font = fonts["FONT1"]; 
-			DrawTextEx(font, player1Name.c_str(), Vector2{ 110, 325 }, 30, 2, BLACK); 
-			DrawTextEx(font, player2Name.c_str(), Vector2{ 1100, 350 }, 30, 2, BLACK);
+			Font font = fonts["FONT3"]; 
+			DrawTextEx(font, player1Name.c_str(), Vector2{ 65, 380 }, 40, 2, BLACK); 
+			DrawTextEx(font, player2Name.c_str(), Vector2{ 1070, 320 }, 40, 2, BLACK);
 
 			std::vector<Move> moveSelectedPiece;
 
@@ -106,6 +107,7 @@ void Game::Run()
 
 			if (gameState == GAME_STATE::GS_PROMOTION)
 			{
+				DrawTexture(textures["MEAW_PROMOTION"], 0, 0, WHITE);
 				Renderer::RenderPromotion(textures, selectedPiece->color);
 			}
 
@@ -159,6 +161,10 @@ void Game::LoadTextures()
 	// Load Backgrounds
 	textures["MEAW_GAME"] = LoadTexture((TEXTURES_PATH + "MEAW_GAME.png").c_str());
 	textures["MEAW_START"] = LoadTexture((TEXTURES_PATH + "MEAW_START.png").c_str());
+	textures["MEAW_PROMOTION"] = LoadTexture((TEXTURES_PATH + "MEAW_PROMOTION.png").c_str());
+	textures["MEAW_BWON"] = LoadTexture((TEXTURES_PATH + "MEAW_BWON.png").c_str());
+	textures["MEAW_WWON"] = LoadTexture((TEXTURES_PATH + "MEAW_WWON.png").c_str());
+	textures["MEAW_STALEMATE"] = LoadTexture((TEXTURES_PATH + "MEAW_STALEMATE.png").c_str());
 }
 
 void Game::LoadSounds()
@@ -193,7 +199,7 @@ void Game::HandleInput()
 
 		// Ajuste de la posición del ratón tomando en cuenta el offset del tablero
 		int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-		int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+		int offsetY = (Game::WINDOW_HEIGHT - 8 * Game::CELL_SIZE) / 2;
 
 		mousePosition.x -= offsetX;
 		mousePosition.y -= offsetY;
@@ -234,15 +240,13 @@ void Game::HandleInput()
 	}
 }
 
-
 void Game::HandlePromotion()
 {
 	if (IsMouseButtonPressed(0)) {
 		Vector2 mousePosition = GetMousePosition();
-		mousePosition.y -= Game::INFO_BAR_HEIGHT;
 
 		int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-		int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+		int offsetY = (Game::WINDOW_HEIGHT - 8 * Game::CELL_SIZE) / 2;
 
 		mousePosition.x -= offsetX;
 		mousePosition.y -= offsetY;
@@ -284,8 +288,6 @@ void Game::HandlePromotion()
 		}
 	}
 }
-
-
 
 void Game::PossibleMoves()
 {
@@ -348,12 +350,11 @@ void Game::CheckEndGame()
 		// If there are no moves possible and in check, declare checkmate.
 		if (!IsAnyMoveValid())
 		{
-			gameState = (turn == PIECE_COLOR::C_WHITE ? GAME_STATE::GS_BLACK_WON : GAME_STATE::GS_WHITE_WON);
+			gameState = turn == PIECE_COLOR::C_WHITE ? GAME_STATE::GS_BLACK_WON : GAME_STATE::GS_WHITE_WON;
 		}
 	}
 	else if (!IsAnyMoveValid())
 	{
-		// If not in check and there is not any move possible, declare stalemate.
 		gameState = GAME_STATE::GS_STALEMATE;
 	}
 }
