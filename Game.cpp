@@ -222,14 +222,12 @@ void Game::HandlePromotion()
 		Vector2 mousePosition = GetMousePosition();
 		mousePosition.y -= Game::INFO_BAR_HEIGHT;
 
-		// Ajustar las coordenadas del ratón según el desplazamiento del tablero
 		int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
 		int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
 
 		mousePosition.x -= offsetX;
 		mousePosition.y -= offsetY;
 
-		// Calcular la posición de la celda
 		Position clickedPosition = { static_cast<int>(mousePosition.y) / CELL_SIZE, static_cast<int>(mousePosition.x) / CELL_SIZE };
 
 		if (clickedPosition.i == 3 && clickedPosition.j >= 2 && clickedPosition.j <= 5)

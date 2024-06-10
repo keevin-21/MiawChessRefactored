@@ -10,149 +10,160 @@ void Renderer::Clear()
 
 void Renderer::RenderBackground()
 {
-	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
 
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			int x = j * Game::CELL_SIZE + offsetX;
-			int y = i * Game::CELL_SIZE + offsetY;
+    int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
+    int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
-			Color cellColor = GetShadeColor(GetColorCell({ i, j }));
-			DrawRectangle(x, y, Game::CELL_SIZE, Game::CELL_SIZE, cellColor);
-		}
-	}
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            int x = j * Game::CELL_SIZE + offsetX;
+            int y = i * Game::CELL_SIZE + offsetY;
+
+            Color cellColor = GetShadeColor(GetColorCell({ i, j }));
+            DrawRectangle(x, y, Game::CELL_SIZE, Game::CELL_SIZE, cellColor);
+        }
+    }
 }
 
 void Renderer::RenderPieces(const Board& board, const std::map<string, Texture>& textures)
 {
-	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
 
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			Piece* piece = board.At({ i, j });
+    int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
+    int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
-			if (piece != nullptr)
-			{
-				int x = j * Game::CELL_SIZE + offsetX;
-				int y = i * Game::CELL_SIZE + offsetY;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            Piece* piece = board.At({ i, j });
 
-				DrawTexture(textures.at(piece->GetName()), x, y, WHITE);
-			}
-		}
-	}
+            if (piece != nullptr)
+            {
+                int x = j * Game::CELL_SIZE + offsetX;
+                int y = i * Game::CELL_SIZE + offsetY;
+
+                DrawTexture(textures.at(piece->GetName()), x, y, WHITE);
+            }
+        }
+    }
 }
 
 void Renderer::RenderPossibleMoves(const std::map<string, Texture>& textures, const std::vector<Move>& possibleMoves)
 {
-	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
 
-	for (const Move& move : possibleMoves)
-	{
-		DrawTexture(
-			textures.at(GetTextureFromMoveType(move.type)),
-			move.position.j * Game::CELL_SIZE + offsetX,
-			move.position.i * Game::CELL_SIZE + offsetY,
-			WHITE
-		);
-	}
+    int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
+    int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
+
+    for (const Move& move : possibleMoves)
+    {
+        DrawTexture(
+            textures.at(GetTextureFromMoveType(move.type)),
+            move.position.j * Game::CELL_SIZE + offsetX,
+            move.position.i * Game::CELL_SIZE + offsetY,
+            WHITE
+        );
+    }
 }
 
 void Renderer::RenderGuide()
 {
-	int padding = 5;
-	int fontSize = 20;
-	int characterSize = 10;
+    int padding = 5;
+    int fontSize = 20;
+    int characterSize = 10;
 
-	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
 
-	// Render row numbers (1-8) on the left side
-	for (int i = 0; i < 8; i++)
-	{
-		Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ i, 0 })));
-		int x = padding;
-		int y = i * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetY;
+    int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
+    int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
-		char text[2];
-		text[0] = '1' + (7 - i); // For 1-8 from top to bottom
-		text[1] = '\0';
+    // Render row numbers (1-8) on the left side
+    for (int i = 0; i < 8; i++)
+    {
+        Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ i, 0 })));
+        int x = padding;
+        int y = i * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetY;
 
-		DrawText(text, x + offsetX - padding * 2, y, fontSize, textColor); // Adjust x position for centering
-	}
+        char text[2];
+        text[0] = '1' + (7 - i); // For 1-8 from top to bottom
+        text[1] = '\0';
 
-	// Render column letters (a-h) on the bottom side
-	for (int j = 0; j < 8; j++)
-	{
-		Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ 7, j })));
-		int x = j * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetX;
-		int y = Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT + padding;
+        DrawText(text, x + offsetX - padding * 2, y, fontSize, textColor); // Adjust x position for centering
+    }
 
-		char text[2];
-		text[0] = 'a' + j; // For a-h from left to right
-		text[1] = '\0';
+    // Render column letters (a-h) on the bottom side
+    for (int j = 0; j < 8; j++)
+    {
+        Color textColor = GetShadeColor(Piece::GetInverseColor(GetColorCell({ 7, j })));
+        int x = j * Game::CELL_SIZE + (Game::CELL_SIZE - characterSize) / 2 + offsetX;
+        int y = windowHeight - Game::CELL_SIZE + padding;
 
-		DrawText(text, x, y, fontSize, textColor);
-	}
+        char text[2];
+        text[0] = 'a' + j; // For a-h from left to right
+        text[1] = '\0';
+
+        DrawText(text, x, y, fontSize, textColor);
+    }
 }
-
 
 void Renderer::RenderPromotion(const std::map<std::string, Texture>& textures, PIECE_COLOR pawnColor)
 {
-	// Calcula el offset para centrar el tablero.
-	int offsetX = (Game::WINDOW_WIDTH - 8 * Game::CELL_SIZE) / 2;
-	int offsetY = (Game::WINDOW_HEIGHT - Game::INFO_BAR_HEIGHT - 8 * Game::CELL_SIZE) / 2 + Game::INFO_BAR_HEIGHT;
+    int windowWidth = GetScreenWidth();
+    int windowHeight = GetScreenHeight();
 
-	// Renderiza los elementos centrados.
-	DrawRectangle(offsetX, offsetY, 8 * Game::CELL_SIZE, 8 * Game::CELL_SIZE, Color{ 0, 0, 0, 127 });
-	DrawText("Promotion", offsetX + (Game::WINDOW_WIDTH / 2) - 98, offsetY + (Game::WINDOW_HEIGHT / 4), 40, WHITE);
+    int offsetX = (windowWidth - 8 * Game::CELL_SIZE) / 2;
+    int offsetY = (windowHeight - 8 * Game::CELL_SIZE) / 2;
 
-	string prefix = pawnColor == PIECE_COLOR::C_WHITE ? "w" : "b";
+    DrawRectangle(offsetX, offsetY, 8 * Game::CELL_SIZE, 8 * Game::CELL_SIZE, Color{ 0, 0, 0, 127 });
+    DrawText("Promotion", offsetX + (windowWidth / 2) - 98, offsetY + (windowHeight / 4), 40, WHITE);
 
-	int textureY = offsetY + 3 * Game::CELL_SIZE;
-	int textY = offsetY + 4 * Game::CELL_SIZE + 5;
+    string prefix = pawnColor == PIECE_COLOR::C_WHITE ? "w" : "b";
 
-	// Renderiza las opciones de promoción centradas.
-	{
-		DrawTexture(textures.at(prefix + "q"), offsetX + 2 * Game::CELL_SIZE, textureY, WHITE);
-		DrawText("Queen", offsetX + 2 * Game::CELL_SIZE + 9, textY, 20, WHITE);
-	}
+    int textureY = offsetY + 3 * Game::CELL_SIZE;
+    int textY = offsetY + 4 * Game::CELL_SIZE + 5;
 
-	{
-		DrawTexture(textures.at(prefix + "r"), offsetX + 3 * Game::CELL_SIZE, textureY, WHITE);
-		DrawText("Rook", offsetX + 3 * Game::CELL_SIZE + 14, textY, 20, WHITE);
-	}
+    {
+        DrawTexture(textures.at(prefix + "q"), offsetX + 2 * Game::CELL_SIZE, textureY, WHITE);
+        DrawText("Queen", offsetX + 2 * Game::CELL_SIZE + 9, textY, 20, WHITE);
+    }
 
-	{
-		DrawTexture(textures.at(prefix + "b"), offsetX + 4 * Game::CELL_SIZE, textureY, WHITE);
-		DrawText("Bishop", offsetX + 4 * Game::CELL_SIZE + 7, textY, 20, WHITE);
-	}
+    {
+        DrawTexture(textures.at(prefix + "r"), offsetX + 3 * Game::CELL_SIZE, textureY, WHITE);
+        DrawText("Rook", offsetX + 3 * Game::CELL_SIZE + 14, textY, 20, WHITE);
+    }
 
-	{
-		DrawTexture(textures.at(prefix + "n"), offsetX + 5 * Game::CELL_SIZE, textureY, WHITE);
-		DrawText("Knight", offsetX + 5 * Game::CELL_SIZE + 9, textY, 20, WHITE);
-	}
+    {
+        DrawTexture(textures.at(prefix + "b"), offsetX + 4 * Game::CELL_SIZE, textureY, WHITE);
+        DrawText("Bishop", offsetX + 4 * Game::CELL_SIZE + 7, textY, 20, WHITE);
+    }
+
+    {
+        DrawTexture(textures.at(prefix + "n"), offsetX + 5 * Game::CELL_SIZE, textureY, WHITE);
+        DrawText("Knight", offsetX + 5 * Game::CELL_SIZE + 9, textY, 20, WHITE);
+    }
 }
-
 
 void Renderer::RenderInfo(int round, double timer)
 {
-	DrawRectangle(0, 0, Game::WINDOW_WIDTH, Game::INFO_BAR_HEIGHT, BLACK);
+    std::string roundText = "Round: " + std::to_string(round);
+    std::string timeText = "Time: " + std::to_string((int)timer) + "s";
 
-	std::string roundText = "Round: " + std::to_string(round);
-	std::string timeText = "Time: " + std::to_string((int)timer) + "s";
+    int padding = 5;
+    int fontSize = 20;
 
-	int timeTextWidth = MeasureText(timeText.c_str(), 20);
-	int padding = 5;
+    int roundTextWidth = MeasureText(roundText.c_str(), fontSize);
+    int timeTextWidth = MeasureText(timeText.c_str(), fontSize);
 
-	DrawText(roundText.c_str(), padding, Game::INFO_BAR_HEIGHT / 2 - 10, 20, WHITE);
-	DrawText(timeText.c_str(), Game::WINDOW_WIDTH - timeTextWidth - padding, Game::INFO_BAR_HEIGHT / 2 - 10, 20, WHITE);
+    DrawText(roundText.c_str(), padding, padding, fontSize, WHITE);
+    DrawText(timeText.c_str(), GetScreenWidth() - timeTextWidth - padding, padding, fontSize, WHITE);
 }
 
 void Renderer::RenderEndGame(GAME_STATE gameState)
