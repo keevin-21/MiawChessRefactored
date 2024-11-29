@@ -12,7 +12,8 @@ public:
     std::vector<Move> GetPossibleMoves(const Board& board) override;
 
 private:
-    void ValidMoves(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease);
+    // Método para añadir movimientos en una dirección específica.
+    void AddMovesInDirection(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease);
 };
 
 #endif //MEOWCHESS_BISHOP_H

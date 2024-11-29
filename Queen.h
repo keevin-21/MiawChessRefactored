@@ -12,7 +12,8 @@ public:
     std::vector<Move> GetPossibleMoves(const Board& board) override;
 
 private:
-    void ValidMoves(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease);
+    // Función que maneja las direcciones de movimiento como estrategia
+    void AddMovesInDirection(const Board& board, std::vector<Move>& possibleMoves, Position pos, int iIncrease, int jIncrease);
 };
 
 #endif //MEOWCHESS_QUEEN_H

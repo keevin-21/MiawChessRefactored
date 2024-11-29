@@ -74,7 +74,6 @@ std::vector<Move> King::CalculateMoves(const Board& board)
 
 // La función IsCastlingAvailable no sufrió cambios, ya que cumple una única función clara
 // que no necesita refactorización adicional en este momento.
-
 bool King::IsCastlingAvailable(const Board& board, const Position& rookPosition, const std::vector<Position>& mediumPositions)
 {
     Piece* piece = board.At(rookPosition);
