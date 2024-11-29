@@ -306,7 +306,7 @@ void Menu::DrawNamesScreen()
 	Vector2 Save1Position = { 540, 305 };
 	DrawTextureEx(textures["MEAW_SAVE1"], Save1Position, 0.0f, 1.0f, WHITE);
 	if (currentInputPlayer == 1) {
-		DrawRectangleRoundedLines(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK);
+		DrawRectangleRoundedLines(Rectangle{ 240, 307, 280, 55 }, 5.0f, 3, PINK);
 	}
 	DrawRectangleRounded(Rectangle{ 240, 307, 280, 55 }, 5.0f, 5.0f, WHITE);
 	DrawTextEx(font3, player1Name, Vector2{ 260, 325 }, 20, 2, BLACK);
@@ -319,7 +319,7 @@ void Menu::DrawNamesScreen()
 	Vector2 Save2Position = { 1030, 305 };
 	DrawTextureEx(textures["MEAW_SAVE2"], Save2Position, 0.0f, 1.0f, WHITE);
 	if (currentInputPlayer == 2) {
-		DrawRectangleRoundedLines(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, 3, PINK);
+		DrawRectangleRoundedLines(Rectangle{ 730, 307, 280, 55 }, 5.0f, 3, PINK);
 	}
 	DrawRectangleRounded(Rectangle{ 730, 307, 280, 55 }, 5.0f, 5.0f, WHITE);
 	DrawTextEx(font3, player2Name, Vector2{ 750, 325 }, 20, 2, BLACK);
