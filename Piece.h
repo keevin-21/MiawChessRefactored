@@ -17,6 +17,7 @@ public:
     Piece(Position position, PIECE_COLOR color, PIECE_TYPE type);
     virtual ~Piece() = default;
 
+    // Métodos estáticos para obtener la pieza, el color inverso y el caracter de la pieza
     static Piece* CreatePiece(PIECE_TYPE type, const Position& position, PIECE_COLOR color);
     static PIECE_COLOR GetInverseColor(PIECE_COLOR color);
     static std::string GetPieceCharacter(PIECE_TYPE type);
@@ -24,16 +25,14 @@ public:
     virtual void DoMove(const Move& move);
     virtual std::vector<Move> GetPossibleMoves(const Board& board) = 0;
 
-    Position GetPosition();
-    std::string GetName();
-    bool HasMoved();
+    Position GetPosition() const;
+    std::string GetName() const;
+    bool HasMoved() const;
 
     const PIECE_COLOR color;
     const PIECE_TYPE type;
 
-    void SetPosition(const Position& newPosition) {
-        position = newPosition;
-    }
+    void SetPosition(const Position& newPosition);
 
 protected:
     Position position;
@@ -41,6 +40,7 @@ protected:
 
 private:
     std::string name;
+    void GenerateName(); // Método privado para generar el nombre de la pieza
 };
 
-#endif //RAY_CHESS_PIECE_H
+#endif //MEOWCHESS_PIECE_H

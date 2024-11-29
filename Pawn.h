@@ -18,6 +18,13 @@ public:
 private:
     bool IsInPromotionPos(const Position& position);
     bool IsEnPassantAvailable(const Board& board, const Position& piecePosition, const Position& attackPosition);
+
+    // Métodos para modularizar las verificaciones de movimiento
+    void AddStepMove(const Board& board, std::vector<Move>& possibleMoves);
+    void AddDoubleStepMove(const Board& board, std::vector<Move>& possibleMoves);
+    void AddAttackMoves(const Board& board, std::vector<Move>& possibleMoves);
+    void AddEnPassantMoves(const Board& board, std::vector<Move>& possibleMoves);
+    void AddPromotionMoves(std::vector<Move>& possibleMoves);
 };
 
 #endif //MEOWCHESS_PAWN_H
